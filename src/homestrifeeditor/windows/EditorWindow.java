@@ -25,6 +25,9 @@ public class EditorWindow extends JFrame implements ActionListener {
     
     public String workingDirectory;
     
+    public ObjectListPane holdListPane;
+    public TextureObjectPane textureHitboxPane;
+    
     //File chooser is declared at the class level so that it remembers last folder location..
     public static JFileChooser fileChooser;
     
