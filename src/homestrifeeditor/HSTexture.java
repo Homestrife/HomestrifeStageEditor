@@ -20,6 +20,12 @@ public class HSTexture {
         filePath = theFilePath;
     }
     
+    public HSTexture(String theFilePath, int theDepth, HSVect2D theOffset) {
+    	offset = theOffset;
+    	depth = theDepth;
+    	filePath = theFilePath;
+    }
+    
     public HSTexture(HSTexture t) {
     	//Deep copy
     	offset = new HSVect2D(t.offset);

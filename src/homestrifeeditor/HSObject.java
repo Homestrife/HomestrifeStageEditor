@@ -18,8 +18,7 @@ import org.xml.sax.SAXException;
 
 public class HSObject {
 	public String texturePath = "";
-	public float posX = 0;
-	public float posY = 0;
+	public HSVect2D pos = new HSVect2D();
 	public int depth = 0;
 	
 	public HSObject() {
@@ -27,7 +26,7 @@ public class HSObject {
 	}
 	
 	public String toString() {
-		return "HSObject at position (" + posX + ", " + posY + ") at depth=" + depth + " with texture at " + texturePath;
+		return "HSObject at position (" + pos.x + ", " + pos.y + ") at depth=" + depth + " with texture at " + texturePath;
 	}
 	
 	public static HSObject ObjectFromDefinition(String dir, String defPath, NamedNodeMap attributes, EditorWindow window) {
@@ -60,8 +59,8 @@ public class HSObject {
         	hsobject = new HSObject();
         	hsobject.texturePath = dir + texPath;
 
-        	if(attributes.getNamedItem("posX") != null) hsobject.posX = Float.parseFloat(attributes.getNamedItem("posX").getNodeValue());
-        	if(attributes.getNamedItem("posY") != null) hsobject.posY = Float.parseFloat(attributes.getNamedItem("posY").getNodeValue());
+        	if(attributes.getNamedItem("posX") != null) hsobject.pos.x = Float.parseFloat(attributes.getNamedItem("posX").getNodeValue());
+        	if(attributes.getNamedItem("posY") != null) hsobject.pos.y = Float.parseFloat(attributes.getNamedItem("posY").getNodeValue());
         	if(attributes.getNamedItem("depth") != null) hsobject.depth = Integer.parseInt(attributes.getNamedItem("depth").getNodeValue());
         	
         	System.out.println(hsobject);

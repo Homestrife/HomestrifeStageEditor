@@ -45,6 +45,8 @@ public class EditorWindow extends JFrame implements ActionListener {
     public ObjectListPane holdListPane;
     public TextureObjectPane textureObjectPane;
     
+    public HSStage currentlyLoadedStage;
+    
     //File chooser is declared at the class stage so that it remembers last folder location..
     public static JFileChooser fileChooser;
     
@@ -223,6 +225,13 @@ public class EditorWindow extends JFrame implements ActionListener {
     	sp.setResizeWeight(.2);
         this.setContentPane(sp);
     }
+    
+    public void setCurrentlyLoadedStage(HSStage newStage)
+    {
+        currentlyLoadedStage = newStage;
+        setTitle(BaseWindowTitle + currentlyLoadedStage.name);
+        textureObjectPane.setStage(currentlyLoadedStage);
+    }
 
 	private JComponent createObjectListPane() {
         holdListPane = new ObjectListPane(this);
@@ -234,6 +243,11 @@ public class EditorWindow extends JFrame implements ActionListener {
 		return textureObjectPane;
 	}
 
+	public void newObject() {
+		textureObjectPane.setStage(currentlyLoadedStage);
+		textureObjectPane.resetScrollBars();
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		System.out.println(e.getActionCommand());
@@ -290,6 +304,8 @@ public class EditorWindow extends JFrame implements ActionListener {
         			break;
         		}
         	}
+        	
+        	setCurrentlyLoadedStage(loadStage);
         }
         catch(ParserConfigurationException e) {
         	JOptionPane.showMessageDialog(this, e.getMessage(), "Parser Configuration Exception", JOptionPane.ERROR_MESSAGE);  

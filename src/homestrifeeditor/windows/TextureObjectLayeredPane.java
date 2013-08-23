@@ -1,8 +1,11 @@
 package homestrifeeditor.windows;
 
+import homestrifeeditor.HSObject;
+import homestrifeeditor.HSStage;
 import homestrifeeditor.HSTexture;
 import homestrifeeditor.HSTextureLabel;
 
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -45,6 +48,25 @@ public class TextureObjectLayeredPane extends JLayeredPane implements MouseListe
         newTex.offset.y = 0;
         
         //addTexture(newTex);
+    }
+
+	public void setStage(HSStage stage) {
+		for(HSObject obj : stage.objects) {
+			HSTextureLabel texLabel = new HSTextureLabel(this, new HSTexture(obj.texturePath, obj.depth, obj.pos));
+			if(texLabel.getIcon() == null) return;
+			texLabel.setVisible(true);
+
+			add(texLabel, new Integer(obj.depth));
+		}
+	}
+    
+    @Override
+    public void paintComponent(Graphics g)
+    {
+        super.paintComponent(g);
+        
+        g.drawLine(0, this.getHeight() / 2, this.getWidth(), this.getHeight() / 2);
+        g.drawLine(this.getWidth() / 2, 0, this.getWidth() / 2, this.getHeight());
     }
 
 	@Override
