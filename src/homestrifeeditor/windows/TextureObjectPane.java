@@ -1,7 +1,8 @@
 package homestrifeeditor.windows;
 
-import homestrifeeditor.HSLevel;
+import homestrifeeditor.HSStage;
 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -20,7 +21,7 @@ public class TextureObjectPane  extends JPanel implements ActionListener, ItemLi
     public static int textureObjectPaneHeight = 1080 * 4;
     
     public EditorWindow parent;
-    public HSLevel level;
+    public HSStage stage;
     
     public TextureObjectLayeredPane textureObjectLayeredPane;
     public JScrollPane textureObjectScrollPane;
@@ -31,7 +32,7 @@ public class TextureObjectPane  extends JPanel implements ActionListener, ItemLi
     
     public TextureObjectPane(EditorWindow theParent) {
     	parent = theParent;
-    	level = null;
+    	stage = null;
     	clipboard = new ArrayList<JLabel>();
     	
     	createPaneContents();
@@ -41,7 +42,13 @@ public class TextureObjectPane  extends JPanel implements ActionListener, ItemLi
 	private void createPaneContents() {
 		
 	}
-
+	
+    public Point getSwingOffset(float x, float y)
+    {
+        Point point = new Point(textureObjectPaneWidth/2 + (int)x, textureObjectPaneHeight/2 + (int)y);
+        
+        return point;
+    }
 
 	@Override
 	public void itemStateChanged(ItemEvent arg0) {

@@ -1,5 +1,8 @@
 package homestrifeeditor.windows;
 
+import homestrifeeditor.HSObject;
+import homestrifeeditor.HSStage;
+
 import java.awt.Dimension;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
@@ -7,28 +10,42 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
+import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class EditorWindow extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
-	public static String BaseWindowTitle = "Homestrife Level Editor - ";
+	public static String BaseWindowTitle = "Homestrife Stage Editor - ";
     public static int windowWidth = 1000;
     public static int windowHeight = 600;
     
     public String workingDirectory;
     
     public ObjectListPane holdListPane;
-    public TextureObjectPane textureHitboxPane;
+    public TextureObjectPane textureObjectPane;
     
-    //File chooser is declared at the class level so that it remembers last folder location..
+    //File chooser is declared at the class stage so that it remembers last folder location..
     public static JFileChooser fileChooser;
     
     public EditorWindow() {
@@ -36,7 +53,7 @@ public class EditorWindow extends JFrame implements ActionListener {
         
         fileChooser = new JFileChooser("..");
         
-        setTitle(BaseWindowTitle + "No Level Loaded");
+        setTitle(BaseWindowTitle + "No Stage Loaded");
         setSize(windowWidth, windowHeight);
         setMinimumSize(new Dimension(windowWidth, windowHeight));
         setLocationRelativeTo(null);
@@ -202,13 +219,87 @@ public class EditorWindow extends JFrame implements ActionListener {
     }
 
     private void createWindowContents() {
-    	
+    	JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, createObjectListPane(), createObjectDataPane());
+    	sp.setResizeWeight(.2);
+        this.setContentPane(sp);
     }
 
+	private JComponent createObjectListPane() {
+        holdListPane = new ObjectListPane(this);
+        return holdListPane;
+	}
+
+	private JComponent createObjectDataPane() {
+		textureObjectPane = new TextureObjectPane(this);
+		return textureObjectPane;
+	}
+
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void actionPerformed(ActionEvent e) {
+		System.out.println(e.getActionCommand());
+		switch(e.getActionCommand()) {
+			case "open": open(); break;
+		}
+	}
+
+
+	private void open() {
+        int returnVal = fileChooser.showOpenDialog(this);
+        File file;
+        
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            file = fileChooser.getSelectedFile();
+        } else {
+            return;
+        }
+        
+        try {
+        	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        	Document doc = dBuilder.parse(file);
+        	doc.getDocumentElement().normalize();
+        	
+        	if(doc.getDocumentElement().getNodeName().compareTo("HSStage") != 0) {
+            	JOptionPane.showMessageDialog(this, "Root node of Stage is not 'HSStage'", "Error", JOptionPane.ERROR_MESSAGE);  
+            	return;
+        	}
+        	
+        	HSStage loadStage = new HSStage();
+        	
+        	NamedNodeMap levelAttributes = doc.getDocumentElement().getAttributes();
+        	if(levelAttributes.getNamedItem("gravity") != null) loadStage.gravity = Float.parseFloat(levelAttributes.getNamedItem("gravity").getNodeValue());
+        	if(levelAttributes.getNamedItem("width") != null) loadStage.width = Integer.parseInt(levelAttributes.getNamedItem("width").getNodeValue());
+        	if(levelAttributes.getNamedItem("height") != null) loadStage.height = Integer.parseInt(levelAttributes.getNamedItem("height").getNodeValue());
+        	
+        	NodeList children = doc.getDocumentElement().getChildNodes();
+        	for(int i=0; i < children.getLength(); i++) {
+        		Node child = children.item(i);
+        		switch(child.getNodeName()) {
+        		case "SpawnPoints": break; //TODO: this
+        		case "Objects": 
+        			NodeList objects = child.getChildNodes();
+                	for(int j=0; j < objects.getLength(); j++) {
+                		//Go through the objects
+                		NamedNodeMap objectAttributes = objects.item(j).getAttributes();
+                		if(objectAttributes == null) continue;
+                		if(objectAttributes.getNamedItem("defFilePath") == null) continue;
+                		HSObject hsobject = HSObject.ObjectFromDefinition(file.getParent() + File.separator, objectAttributes.getNamedItem("defFilePath").getNodeValue(), objectAttributes, this);
+                		if(hsobject != null)
+                			loadStage.objects.add(hsobject);
+                	}
+        			break;
+        		}
+        	}
+        }
+        catch(ParserConfigurationException e) {
+        	JOptionPane.showMessageDialog(this, e.getMessage(), "Parser Configuration Exception", JOptionPane.ERROR_MESSAGE);  
+        }
+        catch(SAXException e) {
+        	JOptionPane.showMessageDialog(this, e.getMessage(), "SAX Exception", JOptionPane.ERROR_MESSAGE);              
+        }
+        catch(IOException e) {
+        	JOptionPane.showMessageDialog(this, e.getMessage(), "IO Exception", JOptionPane.ERROR_MESSAGE);              
+        }
 	}
 
 
