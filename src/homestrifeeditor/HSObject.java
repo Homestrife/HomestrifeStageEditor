@@ -57,7 +57,7 @@ public class HSObject {
         		}
         	}
         	hsobject = new HSObject();
-        	hsobject.texturePath = dir + texPath;
+        	hsobject.texturePath = file.getParent() + File.separator + texPath;
 
         	if(attributes.getNamedItem("posX") != null) hsobject.pos.x = Float.parseFloat(attributes.getNamedItem("posX").getNodeValue());
         	if(attributes.getNamedItem("posY") != null) hsobject.pos.y = Float.parseFloat(attributes.getNamedItem("posY").getNodeValue());
