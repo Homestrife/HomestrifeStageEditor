@@ -42,7 +42,7 @@ public class EditorWindow extends JFrame implements ActionListener {
     
     public String workingDirectory;
     
-    public ObjectListPane holdListPane;
+    public ObjectListPane objectListPane;
     public TextureObjectPane textureObjectPane;
     
     public HSStage currentlyLoadedStage;
@@ -222,7 +222,7 @@ public class EditorWindow extends JFrame implements ActionListener {
 
     private void createWindowContents() {
     	JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, createObjectListPane(), createObjectDataPane());
-    	sp.setResizeWeight(.2);
+    	sp.setResizeWeight(.05);
         this.setContentPane(sp);
     }
     
@@ -231,11 +231,12 @@ public class EditorWindow extends JFrame implements ActionListener {
         currentlyLoadedStage = newStage;
         setTitle(BaseWindowTitle + currentlyLoadedStage.name);
         textureObjectPane.setStage(currentlyLoadedStage);
+        objectListPane.loadStageObjects(currentlyLoadedStage);
     }
 
 	private JComponent createObjectListPane() {
-        holdListPane = new ObjectListPane(this);
-        return holdListPane;
+		objectListPane = new ObjectListPane(this);
+        return objectListPane;
 	}
 
 	private JComponent createObjectDataPane() {
@@ -252,10 +253,20 @@ public class EditorWindow extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		System.out.println(e.getActionCommand());
 		switch(e.getActionCommand()) {
-			case "open": open(); break;
+		case "open": open(); break;
+		case "save": save(); break;
+		case "saveAs": saveAs(); break;
 		}
 	}
 
+
+	private void saveAs() {
+		//TODO
+	}
+
+	private void save() {
+		//TODO
+	}
 
 	private void open() {
         int returnVal = fileChooser.showOpenDialog(this);

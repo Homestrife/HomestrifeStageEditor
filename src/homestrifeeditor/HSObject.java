@@ -17,6 +17,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class HSObject {
+	public String name = "HSObject";
 	public String texturePath = "";
 	public HSVect2D pos = new HSVect2D();
 	public int depth = 0;
