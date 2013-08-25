@@ -1,4 +1,4 @@
-HomestrifeLevelEditor
+HomestrifeStageEditor
 =====================
 
-Level Editor for Homestrife
+Stage Editor for Homestrife
