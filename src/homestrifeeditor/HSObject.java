@@ -22,9 +22,17 @@ public class HSObject {
 	public String defPath = "";
 	public HSVect2D pos = new HSVect2D();
 	public int depth = 0;
-	
+
 	public HSObject() {
 		
+	}
+	
+	public HSObject(HSObject o) {
+		name = new String(o.name);
+		texturePath = new String(o.texturePath);
+		defPath = new String(o.defPath);
+		pos = new HSVect2D(o.pos);
+		depth = o.depth;
 	}
 	
 	public String toString() {

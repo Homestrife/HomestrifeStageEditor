@@ -28,35 +28,21 @@ public class TextureObjectLayeredPane extends JLayeredPane implements MouseListe
 		selectedItems = new ArrayList<JLabel>();
 	}
     
-    public void addTexture(HSTexture tex, boolean addToHold)
-    {
-        HSTextureLabel texLabel = new HSTextureLabel(this, tex);
-        if(texLabel.getIcon() == null) { return; }
-        //texLabel.setVisible(showTextures);
-        
-        add(texLabel, new Integer(tex.depth));
-        
-        //if(addToHold)
-            //parent.hold.textures.add(tex);
-        
-        setSelected(texLabel, false);
-    }
-    
-    public void addTexture(String path) {        
-        HSTexture newTex = new HSTexture(path);
-        
-        //moveAllTextureDepthsDown();
-        newTex.depth = 0;
-        newTex.offset.x = 0;
-        newTex.offset.y = 0;
-        
-        //addTexture(newTex);
+    public void removeSelected() {
+    	for(JLabel sel : selectedItems) {
+    		remove(sel);
+    		parent.parent.currentlyLoadedStage.objects.remove(((HSTextureLabel)sel).parentObject);
+    		parent.parent.objectListPane.removeObjectFromList(((HSTextureLabel)sel).parentObject);
+    		parent.parent.objectListPane.repaint();
+    	}
+    	selectedItems.clear();
+    	repaint();
     }
 
 	public void setStage(HSStage stage) {
 		removeAll();
 		for(HSObject obj : stage.objects) {
-			HSTextureLabel texLabel = new HSTextureLabel(this, new HSTexture(obj.texturePath, obj.depth, obj.pos));
+			HSTextureLabel texLabel = new HSTextureLabel(obj, this, new HSTexture(obj.texturePath, obj.depth, obj.pos));
 			if(texLabel.getIcon() == null) return;
 			texLabel.setVisible(true);
 

@@ -242,6 +242,7 @@ public class EditorWindow extends JFrame implements ActionListener {
 		case "open": open(); break;
 		case "save": save(); break;
 		case "saveAs": saveAs(); break;
+		case "delete": delete(); break;
 		}
 	}
 
@@ -392,7 +393,10 @@ public class EditorWindow extends JFrame implements ActionListener {
         }
 	}
 
-
+	private void delete() {
+		textureObjectPane.textureObjectLayeredPane.removeSelected();
+	}
+	
 	private class KeyDispatcher implements KeyEventDispatcher {
 		@Override
 		public boolean dispatchKeyEvent(KeyEvent e) {

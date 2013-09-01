@@ -17,6 +17,7 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
 	
 	public TextureObjectLayeredPane parent;
 	public HSTexture texture;
+    public HSObject parentObject;
 	public ImageIcon icon;
 	
 	private int mouseStartX;
@@ -25,10 +26,11 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
 	private int mouseMoveThreshold;
 	private boolean moveBox;
 	
-	public HSTextureLabel(TextureObjectLayeredPane theParent, HSTexture theTexture) {
+	public HSTextureLabel(HSObject theParentObject, TextureObjectLayeredPane theParent, HSTexture theTexture) {
 		super();
 		setName("texture");
 		parent = theParent;
+		parentObject = theParentObject;
 		texture = theTexture;
 		mouseStartX = 0;
 		mouseStartY = 0;
@@ -41,7 +43,7 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
 
 	public HSTextureLabel(HSTextureLabel l) {
     	//Woo deep copy
-    	this(l.parent, l.texture);
+    	this(l.parentObject, l.parent, l.texture);
     	setBounds(l.getBounds());
     	texture = new HSTexture(texture);
     }

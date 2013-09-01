@@ -131,7 +131,25 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
         }
     }
     
-    public HSObject removeObjectFromObjectList(int index)
+    public int getIndexOfObject(HSObject obj) {
+    	HSObject[] objs = getAllObjects();
+    	for(int i=0; i < objs.length; i++) {
+    		if(objs[i] == obj) {
+    			return i;
+    		}
+    	}
+    	return -1;
+    }
+    
+    public void removeObjectFromList(HSObject obj) {
+    	int i = getIndexOfObject(obj);
+    	if(i >= 0 && i < parent.currentlyLoadedStage.objects.size())
+    		removeObjectFromList(i);
+    	
+    	System.out.println(i);
+    }
+    
+    public HSObject removeObjectFromList(int index)
     {
         return (HSObject)objectListModel.remove(index);
     }
@@ -143,7 +161,7 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
         Arrays.sort(indices, 0, indices.length - 1);
         for(int i = indices.length - 1; i >= 0; i--)
         {
-            removedObjects.add(0, removeObjectFromObjectList(indices[i]));
+            removedObjects.add(0, removeObjectFromList(indices[i]));
         }
         
         return removedObjects;
@@ -195,7 +213,7 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
         
         if(index <= 0) { return; }
         
-        HSObject objectToMove = removeObjectFromObjectList(index);
+        HSObject objectToMove = removeObjectFromList(index);
         
         objectListModel.add(index - 1, objectToMove);
         
@@ -208,7 +226,7 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
         
         if(index < 0 || index >= objectListModel.getSize() - 1) { return; }
         
-        HSObject objectToMove = removeObjectFromObjectList(index);
+        HSObject objectToMove = removeObjectFromList(index);
         
         objectListModel.add(index + 1, objectToMove);
         
@@ -288,7 +306,11 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if(e.getClickCount() == 2) {
+		if(e.getClickCount() == 1) {
+			//TODO bring to front on click
+			//Also select object in layered pane when clicked
+		}
+		else if(e.getClickCount() == 2) {
 			HSObject sel = objectList.getSelectedValue();
 			if(sel != null) {
 				JScrollPane scrollPane = parent.textureObjectPane.textureObjectScrollPane;

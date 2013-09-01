@@ -13,7 +13,7 @@ public class HSTexture {
     public int depth;
     public String filePath;
     
-    public HSTexture (String theFilePath)
+    public HSTexture (HSObject theParent, String theFilePath)
     {
         offset = new HSVect2D();
         depth = 0;
