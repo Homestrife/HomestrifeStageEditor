@@ -266,7 +266,6 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
         int index = objectList.getSelectedIndex();
         //if(index + 1 > objectList.getMaxSelectionIndex()) return;
     	objectList.setSelectedIndex(index + 1);
-    	objectList.ensureIndexIsVisible(index + 1);
     }
 
 	@Override

@@ -19,6 +19,7 @@ import org.xml.sax.SAXException;
 public class HSObject {
 	public String name = "HSObject";
 	public String texturePath = "";
+	public String defPath = "";
 	public HSVect2D pos = new HSVect2D();
 	public int depth = 0;
 	
@@ -59,6 +60,7 @@ public class HSObject {
         	}
         	hsobject = new HSObject();
         	hsobject.texturePath = file.getParent() + File.separator + texPath;
+        	hsobject.defPath = defPath;
 
         	if(attributes.getNamedItem("posX") != null) hsobject.pos.x = Float.parseFloat(attributes.getNamedItem("posX").getNodeValue());
         	if(attributes.getNamedItem("posY") != null) hsobject.pos.y = Float.parseFloat(attributes.getNamedItem("posY").getNodeValue());

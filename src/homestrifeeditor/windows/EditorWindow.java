@@ -26,8 +26,15 @@ import javax.swing.KeyStroke;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -40,7 +47,7 @@ public class EditorWindow extends JFrame implements ActionListener {
     public static int windowWidth = 1000;
     public static int windowHeight = 600;
     
-    public String workingDirectory;
+    public File currentFile;
     
     public ObjectListPane objectListPane;
     public TextureObjectPane textureObjectPane;
@@ -51,7 +58,7 @@ public class EditorWindow extends JFrame implements ActionListener {
     public static JFileChooser fileChooser;
     
     public EditorWindow() {
-        workingDirectory = "";
+        currentFile = null;
         
         fileChooser = new JFileChooser("..");
         
@@ -275,7 +282,7 @@ public class EditorWindow extends JFrame implements ActionListener {
             return;
         }
 
-        workingDirectory = file.getAbsolutePath();
+        currentFile = file;
         
         //Now that we have a working directory, we can save
         save();
@@ -283,16 +290,60 @@ public class EditorWindow extends JFrame implements ActionListener {
 
 	private void save() {
         //If we don't have a working directory or a loaded object, we should save as instead (save as can handle the lack of a loaded object as well)
-        if(currentlyLoadedStage == null || workingDirectory.isEmpty()) { saveAs(); }
+        if(currentlyLoadedStage == null || currentFile == null) { saveAs(); }
         
-        File wd = new File(workingDirectory);
-        if(!wd.exists()) { return; }
+        //if(!currentFile.exists()) { return; }
         
         createDefinitionFile();
 	}
 
 	private void createDefinitionFile() {
+		if(currentlyLoadedStage == null) { return; }
 		
+		try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.newDocument();
+            
+            Element root = doc.createElement("HSStage");
+            root.setAttribute("gravity", "" + currentlyLoadedStage.gravity);
+            root.setAttribute("width", "" + currentlyLoadedStage.width);
+            root.setAttribute("height", "" + currentlyLoadedStage.height);
+            
+            //TODO spawn points
+            
+            Element objects = doc.createElement("Objects");
+            for(HSObject obj : currentlyLoadedStage.objects) {
+            	Element object = doc.createElement("Object");
+            	object.setAttribute("defFilePath", obj.defPath);
+            	object.setAttribute("posX", "" + obj.pos.x);
+            	object.setAttribute("posY", "" + obj.pos.y);
+            	object.setAttribute("depth", "" + obj.depth);
+            	objects.appendChild(object);
+            }
+            root.appendChild(objects);
+            doc.appendChild(root);
+            
+            //Save the file
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(currentFile);
+            transformer.transform(source, result);
+		}
+        catch(ParserConfigurationException e)
+        {
+        	JOptionPane.showMessageDialog(this, e.getMessage(), "Parser Configuration Exception", JOptionPane.ERROR_MESSAGE);  
+            
+        }
+        catch(TransformerConfigurationException e)
+        {
+        	JOptionPane.showMessageDialog(this, e.getMessage(), "Transformer Configuration Exception", JOptionPane.ERROR_MESSAGE);
+        }
+        catch(TransformerException e)
+        {
+        	JOptionPane.showMessageDialog(this, e.getMessage(), "Transformer Exception", JOptionPane.ERROR_MESSAGE);   
+        }
 	}
 
 	private void open() {
@@ -344,7 +395,7 @@ public class EditorWindow extends JFrame implements ActionListener {
         	}
         	
         	setCurrentlyLoadedStage(loadStage);
-            workingDirectory = file.getParent();
+            currentFile = file;
         }
         catch(ParserConfigurationException e) {
         	JOptionPane.showMessageDialog(this, e.getMessage(), "Parser Configuration Exception", JOptionPane.ERROR_MESSAGE);  
