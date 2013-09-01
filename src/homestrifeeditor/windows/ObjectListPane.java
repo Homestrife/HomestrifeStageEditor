@@ -1,9 +1,7 @@
 package homestrifeeditor.windows;
 
-import homestrifeeditor.HSBox;
 import homestrifeeditor.HSObject;
 import homestrifeeditor.HSStage;
-import homestrifeeditor.HSTexture;
 import homestrifeeditor.ObjectListCellRenderer;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -290,9 +288,16 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
 	}
 
 	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void mousePressed(MouseEvent e) {
+		if(e.getClickCount() == 2) {
+			HSObject sel = objectList.getSelectedValue();
+			if(sel != null) {
+				JScrollPane scrollPane = parent.textureObjectPane.textureObjectScrollPane;
+				scrollPane.revalidate();
+				scrollPane.getHorizontalScrollBar().setValue((int) sel.pos.x + (scrollPane.getHorizontalScrollBar().getMinimum() + scrollPane.getHorizontalScrollBar().getMaximum()) / 2);
+				scrollPane.getVerticalScrollBar().setValue((int) sel.pos.y + (scrollPane.getVerticalScrollBar().getMinimum() + scrollPane.getVerticalScrollBar().getMaximum()) / 2);
+			}
+		}
 	}
 
 	@Override

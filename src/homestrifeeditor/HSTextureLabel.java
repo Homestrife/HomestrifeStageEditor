@@ -62,7 +62,6 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
 	public void mouseDragged(MouseEvent e) {
 		if(!parent.selectedItems.contains(this)) { return; }
         //if(locked) return;
-        
         Component c = e.getComponent();
         
         if(c == null) { return ; }

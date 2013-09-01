@@ -5,12 +5,15 @@ import homestrifeeditor.HSStage;
 import homestrifeeditor.HSTexture;
 import homestrifeeditor.HSTextureLabel;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
@@ -36,7 +39,7 @@ public class TextureObjectLayeredPane extends JLayeredPane implements MouseListe
         //if(addToHold)
             //parent.hold.textures.add(tex);
         
-        //setSelected(texLabel, false);
+        setSelected(texLabel, false);
     }
     
     public void addTexture(String path) {        
@@ -59,6 +62,48 @@ public class TextureObjectLayeredPane extends JLayeredPane implements MouseListe
 			add(texLabel, new Integer(obj.depth));
 		}
 	}
+    
+    public void unselect(JLabel label)
+    {
+        if(label.getName().compareTo("texture") == 0)
+        {
+            label.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        }
+        
+        selectedItems.remove(label);
+        
+        repaint();
+    }
+    
+    public void unselectAll()
+    {
+        for(Component c : getComponents())
+        {
+            if(c.getName().compareTo("texture") == 0)
+            {
+                ((JLabel)c).setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+            }
+        }
+        
+        selectedItems.clear();
+        
+        repaint();
+    }
+    
+    public void setSelected(JLabel selectedLabel, boolean multiSelect)
+    {
+        if(!selectedLabel.isVisible()) { return; }
+        
+        if(!multiSelect)
+        {
+            unselectAll();
+        }
+        
+        selectedItems.add(selectedLabel);
+        selectedLabel.setBorder(BorderFactory.createDashedBorder(Color.BLACK));
+        
+        repaint();
+    }
     
     @Override
     public void paintComponent(Graphics g)
@@ -100,9 +145,8 @@ public class TextureObjectLayeredPane extends JLayeredPane implements MouseListe
 	}
 
 	@Override
-	public void mousePressed(MouseEvent arg0) {
+	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
