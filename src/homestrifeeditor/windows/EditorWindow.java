@@ -79,11 +79,7 @@ public class EditorWindow extends JFrame implements ActionListener {
     {
         JMenuBar menuBar;
         JMenu file;
-        JMenu newObject;
-        JMenuItem newGraphic;
-        JMenuItem newTerrain;
-        JMenuItem newPhysicsObject;
-        JMenuItem newFighter;
+        JMenuItem newStage;
         JMenuItem generate;
         JMenuItem open;
         JMenuItem save;
@@ -107,23 +103,9 @@ public class EditorWindow extends JFrame implements ActionListener {
         menuBar = new JMenuBar();
         
         file = new JMenu("File");
-        newObject = new JMenu("New");
-        //
-        newGraphic = new JMenuItem("Graphic");
-        newGraphic.setActionCommand("newGraphic");
-        newGraphic.addActionListener(this);
-        //
-        newTerrain = new JMenuItem("Terrain");
-        newTerrain.setActionCommand("newTerrain");
-        newTerrain.addActionListener(this);
-        //
-        newPhysicsObject = new JMenuItem("Physics Object");
-        newPhysicsObject.setActionCommand("newPhysicsObject");
-        newPhysicsObject.addActionListener(this);
-        //
-        newFighter = new JMenuItem("Fighter");
-        newFighter.setActionCommand("newFighter");
-        newFighter.addActionListener(this);
+        newStage = new JMenuItem("New");
+        newStage.setActionCommand("new");
+        newStage.addActionListener(this);
         //
         generate = new JMenuItem("Generate...");
         generate.setActionCommand("generate");
@@ -146,11 +128,7 @@ public class EditorWindow extends JFrame implements ActionListener {
         importAnimation.setActionCommand("importAnimation");
         importAnimation.addActionListener(this);
         //
-        newObject.add(newGraphic);
-        newObject.add(newTerrain);
-        newObject.add(newPhysicsObject);
-        newObject.add(newFighter);
-        file.add(newObject);
+        file.add(newStage);
         file.add(generate);
         file.add(open);
         file.add(save);
@@ -260,12 +238,18 @@ public class EditorWindow extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		System.out.println(e.getActionCommand());
 		switch(e.getActionCommand()) {
+		case "new": newStage(); break;
 		case "open": open(); break;
 		case "save": save(); break;
 		case "saveAs": saveAs(); break;
 		}
 	}
 
+	private void newStage() {
+		currentlyLoadedStage = new HSStage();
+		currentFile = null;
+		setCurrentlyLoadedStage(currentlyLoadedStage);
+	}
 
 	private void saveAs() {
         if(currentlyLoadedStage == null) {
