@@ -261,11 +261,38 @@ public class EditorWindow extends JFrame implements ActionListener {
 
 
 	private void saveAs() {
-		//TODO
+        if(currentlyLoadedStage == null) {
+        	JOptionPane.showMessageDialog(this, "No Stage loaded", "Whoops", JOptionPane.ERROR_MESSAGE);
+        	return;
+        }
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int returnVal = fileChooser.showSaveDialog(this);
+        File file;
+        
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            file = fileChooser.getSelectedFile();
+        } else {
+            return;
+        }
+
+        workingDirectory = file.getAbsolutePath();
+        
+        //Now that we have a working directory, we can save
+        save();
 	}
 
 	private void save() {
-		//TODO
+        //If we don't have a working directory or a loaded object, we should save as instead (save as can handle the lack of a loaded object as well)
+        if(currentlyLoadedStage == null || workingDirectory.isEmpty()) { saveAs(); }
+        
+        File wd = new File(workingDirectory);
+        if(!wd.exists()) { return; }
+        
+        createDefinitionFile();
+	}
+
+	private void createDefinitionFile() {
+		
 	}
 
 	private void open() {
@@ -317,6 +344,7 @@ public class EditorWindow extends JFrame implements ActionListener {
         	}
         	
         	setCurrentlyLoadedStage(loadStage);
+            workingDirectory = file.getParent();
         }
         catch(ParserConfigurationException e) {
         	JOptionPane.showMessageDialog(this, e.getMessage(), "Parser Configuration Exception", JOptionPane.ERROR_MESSAGE);  
