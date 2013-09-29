@@ -2,6 +2,7 @@ package homestrifeeditor.windows;
 
 import homestrifeeditor.HSObject;
 import homestrifeeditor.HSStage;
+import homestrifeeditor.HSTextureLabel;
 import homestrifeeditor.ObjectListCellRenderer;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -175,7 +176,13 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
         if(n != JOptionPane.OK_OPTION) return null;
         ArrayList<HSObject> removeObjs = removeObjectsFromList(objectList.getSelectedIndices());
         parent.currentlyLoadedStage.objects.remove(removeObjs);
-        parent.repaint();
+        for(Component c : parent.textureObjectPane.textureObjectLayeredPane.getComponents()) {
+        	HSTextureLabel texLabel = ((HSTextureLabel)c);
+        	if(removeObjs.contains(texLabel.parentObject)) {
+        		parent.textureObjectPane.textureObjectLayeredPane.remove(c);
+        	}
+        }
+        parent.textureObjectPane.textureObjectLayeredPane.repaint();
         return n == 0 ? removeObjs : null;
     }
     

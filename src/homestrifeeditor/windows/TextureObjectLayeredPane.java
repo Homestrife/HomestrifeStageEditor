@@ -42,11 +42,11 @@ public class TextureObjectLayeredPane extends JLayeredPane implements MouseListe
 	public void setStage(HSStage stage) {
 		removeAll();
 		for(HSObject obj : stage.objects) {
-			HSTextureLabel texLabel = new HSTextureLabel(obj, this, new HSTexture(obj.texturePath, obj.depth, obj.pos));
+			HSTextureLabel texLabel = new HSTextureLabel(obj, this, new HSTexture(obj.texturePath, -obj.depth, obj.pos));
 			if(texLabel.getIcon() == null) return;
 			texLabel.setVisible(true);
 
-			add(texLabel, new Integer(obj.depth));
+			add(texLabel, new Integer(-obj.depth));
 		}
 		repaint();
 	}

@@ -132,6 +132,7 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
             parent.setSelected(this, multiSelect);
             mouseStartX = e.getX();
             mouseStartY = e.getY();
+            parent.parent.parent.objectListPane.objectList.clearSelection();
         }
 	}
 

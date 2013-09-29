@@ -40,8 +40,8 @@ public class HSObject {
 	}
 	
 	public static HSObject ObjectFromDefinition(File def, EditorWindow window) {
-		HSObject object = new HSObject();
-		object.defPath = def.getPath();
+		HSObject hsobject = new HSObject();
+		hsobject.defPath = def.getPath();
 		String texPath = "";
 		//All this work for the freakin texure
 		try {
@@ -67,7 +67,8 @@ public class HSObject {
         			}
         		}
         	}
-        	object.texturePath = def.getParent() + File.separator + texPath;
+        	hsobject.texturePath = def.getParent() + File.separator + texPath;
+        	hsobject.name = def.getName();
 		} 
         catch(ParserConfigurationException e) {
         	JOptionPane.showMessageDialog(null, e.getMessage(), "Parser Configuration Exception", JOptionPane.ERROR_MESSAGE);  
@@ -78,7 +79,7 @@ public class HSObject {
         catch(IOException e) {
         	JOptionPane.showMessageDialog(null, e.getMessage(), "IO Exception", JOptionPane.ERROR_MESSAGE);              
         }
-		return object;
+		return hsobject;
 	}
 	
 	public static HSObject ObjectFromDefinition(String dir, String defPath, NamedNodeMap attributes, EditorWindow window) {
@@ -111,6 +112,7 @@ public class HSObject {
         	hsobject = new HSObject();
         	hsobject.texturePath = file.getParent() + File.separator + texPath;
         	hsobject.defPath = window.createAbsolutePath(defPath);
+        	hsobject.name = defPath;
 
         	if(attributes.getNamedItem("posX") != null) hsobject.pos.x = Float.parseFloat(attributes.getNamedItem("posX").getNodeValue());
         	if(attributes.getNamedItem("posY") != null) hsobject.pos.y = Float.parseFloat(attributes.getNamedItem("posY").getNodeValue());

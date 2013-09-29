@@ -5,6 +5,7 @@
 package homestrifeeditor.windows;
 
 import homestrifeeditor.HSObject;
+import homestrifeeditor.HSTextureLabel;
 
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -96,6 +97,18 @@ public class ObjectAttributesWindow extends JFrame implements ActionListener, Ch
     public void fieldChanged()
     {
     	object.depth = (int) parallaxDepthSpinner.getValue();
+
+    	System.out.println(object.depth);
+    	for(Component c : parent.parent.textureObjectPane.textureObjectLayeredPane.getComponents()) {
+    		HSTextureLabel texLabel = ((HSTextureLabel)c);
+    		if(texLabel.parentObject == object) {
+    			parent.parent.textureObjectPane.textureObjectLayeredPane.remove(texLabel);
+    			texLabel.texture.depth = -object.depth;
+    			parent.parent.textureObjectPane.textureObjectLayeredPane.add(texLabel, object.depth);
+    			parent.parent.textureObjectPane.textureObjectLayeredPane.repaint();
+    			break;
+    		}
+    	}
     }
     
     @Override
