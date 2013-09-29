@@ -9,11 +9,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -170,6 +172,7 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
     public ArrayList<HSObject> removeSelectedObjects()
     {
         int n = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the selected object(s)?", "Delete Object(s)", JOptionPane.YES_NO_OPTION);
+        if(n != JOptionPane.OK_OPTION) return null;
         ArrayList<HSObject> removeObjs = removeObjectsFromList(objectList.getSelectedIndices());
         parent.currentlyLoadedStage.objects.remove(removeObjs);
         parent.repaint();
@@ -294,19 +297,16 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -329,15 +329,32 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		
+	}
+
+	private void addObject() {
+		if(parent.currentlyLoadedStage == null) return;
+		
+        int returnVal = EditorWindow.fileChooser.showOpenDialog(this);
+        File file;
+        
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            file = EditorWindow.fileChooser.getSelectedFile();
+        } else {
+            return;
+        }
+		
+        HSObject obj = HSObject.ObjectFromDefinition(file, parent);
+        parent.currentlyLoadedStage.objects.add(obj);
+        parent.textureObjectPane.setStage(parent.currentlyLoadedStage);
+        addObjectToList(obj);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
         switch(e.getActionCommand())
         {
-            //case "addObject": addObjectToList(); break;
+            case "addObject": addObject(); break;
             case "removeObjects": removeSelectedObjects(); break;
             case "moveObjectUp": moveSelectedObjectUp(); break;
             case "moveObjectDown": moveSelectedObjectDown(); break;
@@ -349,7 +366,6 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
 
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 	

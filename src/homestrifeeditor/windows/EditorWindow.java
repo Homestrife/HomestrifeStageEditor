@@ -232,6 +232,75 @@ public class EditorWindow extends JFrame implements ActionListener {
 		textureObjectPane.setStage(currentlyLoadedStage);
 		textureObjectPane.resetScrollBars();
 	}
+    
+    public String createAbsolutePath(String relPath)
+    {
+    	return createAbsolutePathFrom(relPath, currentFile.getParent());
+    }
+    
+    public String createAbsolutePathFrom(String relPath, String fromPath)
+    {
+    	relPath = relPath.replace('\\', File.separatorChar);
+    	relPath = relPath.replace('/', File.separatorChar);
+    	if(!fromPath.endsWith(File.separator)) fromPath += File.separator;
+    	File a = new File(fromPath);
+	    File b = new File(a, relPath);
+	    String absolute = "";
+		try {
+			absolute = b.getCanonicalPath();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+	    return absolute;
+    }
+    
+    public String createRelativePath(String absPath)
+    {
+    	return createPathRelativeTo(absPath, currentFile.getParent());
+    }
+    
+    public String createPathRelativeTo(String absPath, String relativeTo)
+    {
+    	String[] relativeToPieces = relativeTo.split(File.separator.compareTo("\\") == 0 ? "\\\\" : "/");
+        String[] absPathPieces = absPath.split(File.separator.compareTo("\\") == 0 ? "\\\\" : "/");
+        
+        //first, make sure they share the same drive
+        if(!relativeToPieces[0].equals(absPathPieces[0]))
+        {
+            return "";
+        }
+        
+        //compare each until either one ends or a point of divergeance is found
+        int end = relativeToPieces.length > absPathPieces.length ? absPathPieces.length : relativeToPieces.length;
+        int divergeancePoint = end;
+        for(int i = 0; i < end; i++)
+        {
+            if(!relativeToPieces[i].equals(absPathPieces[i]))
+            {
+                divergeancePoint = i;
+                break;
+            }
+        }
+
+        //add double periods to signify parent directories
+        String relativePath = "";
+        for(int i = 0; i < end - divergeancePoint; i++)
+        {
+            relativePath += ".." + File.separator;
+        }
+        
+        //add the absolute path starting with the divergeance point
+        for(int i = divergeancePoint; i < absPathPieces.length; i++)
+        {
+            if(i > divergeancePoint)
+            {
+                relativePath += File.separator;
+            }
+            relativePath += absPathPieces[i];
+        }
+        
+        return relativePath;
+    }
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -299,7 +368,7 @@ public class EditorWindow extends JFrame implements ActionListener {
             Element objects = doc.createElement("Objects");
             for(HSObject obj : currentlyLoadedStage.objects) {
             	Element object = doc.createElement("Object");
-            	object.setAttribute("defFilePath", obj.defPath);
+            	object.setAttribute("defFilePath", createRelativePath(obj.defPath));
             	object.setAttribute("posX", "" + obj.pos.x);
             	object.setAttribute("posY", "" + obj.pos.y);
             	object.setAttribute("depth", "" + obj.depth);
@@ -339,6 +408,8 @@ public class EditorWindow extends JFrame implements ActionListener {
         } else {
             return;
         }
+
+        currentFile = file;
         
         try {
         	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -379,7 +450,6 @@ public class EditorWindow extends JFrame implements ActionListener {
         	}
         	
         	setCurrentlyLoadedStage(loadStage);
-            currentFile = file;
         }
         catch(ParserConfigurationException e) {
         	JOptionPane.showMessageDialog(this, e.getMessage(), "Parser Configuration Exception", JOptionPane.ERROR_MESSAGE);  
