@@ -54,7 +54,6 @@ public class EditorWindow extends JFrame implements ActionListener {
     
     public HSStage currentlyLoadedStage;
     
-    //File chooser is declared at the class stage so that it remembers last folder location..
     public static JFileChooser fileChooser;
     
     public EditorWindow() {
@@ -134,7 +133,7 @@ public class EditorWindow extends JFrame implements ActionListener {
         file.add(save);
         file.add(saveAs);
         file.add(new JSeparator());
-        file.add(importAnimation);
+        //file.add(importAnimation);
         menuBar.add(file);
         
         edit = new JMenu("Edit");
@@ -193,7 +192,7 @@ public class EditorWindow extends JFrame implements ActionListener {
         eventHolds.setActionCommand("eventHolds");
         object.add(objectAttributes);
         object.add(eventHolds);
-        menuBar.add(object);     
+        //menuBar.add(object);     
         
         help = new JMenu("Help");
         helpContent = new JMenuItem("Help Content");

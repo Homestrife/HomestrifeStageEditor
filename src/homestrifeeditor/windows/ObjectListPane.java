@@ -251,10 +251,16 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
     
     public void editObjectButtonPressed()
     {
-        //createObjectAttributesWindow(getCurrentlySelectedObject());
+    	if(getCurrentlySelectedObject() != null)
+    		createObjectAttributesWindow(getCurrentlySelectedObject());
     }
     
-    public void massShift(int shiftX, int shiftY)
+    private void createObjectAttributesWindow(HSObject hsobj) {
+        ObjectAttributesWindow window = new ObjectAttributesWindow(this, hsobj);
+        window.setVisible(true);
+	}
+
+	public void massShift(int shiftX, int shiftY)
     {
         int[] indices = objectList.getSelectedIndices();
         
@@ -335,7 +341,7 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
             case "removeObjects": removeSelectedObjects(); break;
             case "moveObjectUp": moveSelectedObjectUp(); break;
             case "moveObjectDown": moveSelectedObjectDown(); break;
-            //case "editObject": editObjectButtonPressed(); break;
+            case "editObject": editObjectButtonPressed(); break;
             case "massShift": massShiftButtonPressed(); break;
         }
 		
