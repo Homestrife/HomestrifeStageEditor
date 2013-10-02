@@ -10,7 +10,7 @@ package homestrifeeditor;
  */
 public class HSTexture {
     public HSVect2D offset;
-    public int depth;
+    public double depth;
     public String filePath;
     
     public HSTexture (HSObject theParent, String theFilePath)
@@ -20,7 +20,7 @@ public class HSTexture {
         filePath = theFilePath;
     }
     
-    public HSTexture(String theFilePath, int theDepth, HSVect2D theOffset) {
+    public HSTexture(String theFilePath, double theDepth, HSVect2D theOffset) {
     	offset = theOffset;
     	depth = theDepth;
     	filePath = theFilePath;

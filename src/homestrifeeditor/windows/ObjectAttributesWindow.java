@@ -72,7 +72,7 @@ public class ObjectAttributesWindow extends JFrame implements ActionListener, Ch
     {
     	parallaxDepthLabel = new JLabel("Parallax Depth");
     	parallaxDepthLabel.setToolTipText(parallaxDepthTooltip);
-    	parallaxDepthSpinner = new JSpinner(new SpinnerNumberModel(0, -1000, 1000, 1));
+    	parallaxDepthSpinner = new JSpinner(new SpinnerNumberModel(0.0, -1000.0, 1000.0, 1.0));
     	parallaxDepthSpinner.setToolTipText(parallaxDepthTooltip);
     	parallaxDepthSpinner.addChangeListener(this);
     	parallaxDepthSpinner.setValue(object.depth);
@@ -96,7 +96,7 @@ public class ObjectAttributesWindow extends JFrame implements ActionListener, Ch
     
     public void fieldChanged()
     {
-    	object.depth = (int) parallaxDepthSpinner.getValue();
+    	object.depth = (double) parallaxDepthSpinner.getValue();
 
     	System.out.println(object.depth);
     	for(Component c : parent.parent.textureObjectPane.textureObjectLayeredPane.getComponents()) {

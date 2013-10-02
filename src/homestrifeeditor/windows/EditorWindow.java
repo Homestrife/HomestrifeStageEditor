@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -43,11 +45,17 @@ import org.xml.sax.SAXException;
 public class EditorWindow extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
+    //0 - current
+	public static final int XML_FORMAT_VERSION = 0;
+	
 	public static String BaseWindowTitle = "Homestrife Stage Editor - ";
     public static int windowWidth = 1000;
     public static int windowHeight = 600;
     
-    public File currentFile;
+    public String workingDirectory = "";
+    public String exeDirectory = "";
+    public String fileChooserDirectory = "";
+    public File curFile;
     
     public ObjectListPane objectListPane;
     public TextureObjectPane textureObjectPane;
@@ -56,11 +64,9 @@ public class EditorWindow extends JFrame implements ActionListener {
     
     public static JFileChooser fileChooser;
     
-    public EditorWindow() {
-        currentFile = null;
-        
-        fileChooser = new JFileChooser("..");
-        
+    public EditorWindow() {    
+    	curFile = null;
+    	
         setTitle(BaseWindowTitle + "No Stage Loaded");
         setSize(windowWidth, windowHeight);
         setMinimumSize(new Dimension(windowWidth, windowHeight));
@@ -69,7 +75,17 @@ public class EditorWindow extends JFrame implements ActionListener {
         
     	createMenuBar();
     	createWindowContents();
-        
+    	
+    	loadSettings();
+    	
+    	addWindowListener(new WindowAdapter() {
+    		@Override
+    		public void windowClosing(WindowEvent e) {
+    			saveSettings();
+    			super.windowClosing(e);
+    		}
+    	});
+    	
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addKeyEventDispatcher(new KeyDispatcher());
     }
@@ -84,6 +100,7 @@ public class EditorWindow extends JFrame implements ActionListener {
         JMenuItem save;
         JMenuItem saveAs;
         JMenuItem importAnimation;
+        JMenuItem setExeLocation;
         JMenu edit;
         JMenuItem undo;
         JMenuItem redo;
@@ -127,6 +144,10 @@ public class EditorWindow extends JFrame implements ActionListener {
         importAnimation.setActionCommand("importAnimation");
         importAnimation.addActionListener(this);
         //
+        setExeLocation = new JMenuItem("Set Game Location");
+        setExeLocation.setActionCommand("exeLocation");
+        setExeLocation.addActionListener(this);
+        //
         file.add(newStage);
         file.add(generate);
         file.add(open);
@@ -134,6 +155,7 @@ public class EditorWindow extends JFrame implements ActionListener {
         file.add(saveAs);
         file.add(new JSeparator());
         //file.add(importAnimation);
+        file.add(setExeLocation);
         menuBar.add(file);
         
         edit = new JMenu("Edit");
@@ -210,10 +232,141 @@ public class EditorWindow extends JFrame implements ActionListener {
         this.setContentPane(sp);
     }
     
+    private void loadSettings() {
+    	File file = new File("settings.xml");
+        
+        fileChooser = new JFileChooser(".");
+        exeDirectory = "";
+        fileChooserDirectory = ".";
+        
+    	System.out.println("Loading Settings...");
+        
+		try {
+	        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	        Document doc = dBuilder.parse(file);
+	        doc.getDocumentElement().normalize();
+	        
+	        Node root = doc.getDocumentElement();
+	        if(root.getNodeName().compareTo("Settings") != 0)
+	        {
+	        	JOptionPane.showMessageDialog(this, "Settings file has invalid root", "Error loading settings", JOptionPane.ERROR_MESSAGE); 
+	        	return; 
+	        }
+	        
+	        NodeList nodes = root.getChildNodes();
+	        for(int i=0; i < nodes.getLength(); i++) {
+	        	Node node = nodes.item(i);
+	        	System.out.println(node.getNodeName() + ": " + node.getTextContent());
+	        	switch(node.getNodeName()) {
+	        	case "FileChooserDir":
+	        		if(node.getTextContent() != null)
+	        			fileChooserDirectory = node.getTextContent();
+	        		fileChooser = new JFileChooser(fileChooserDirectory);
+	        		break;
+	        	case "ExeDir":
+	        		if(node.getTextContent() != null)
+	        			exeDirectory = node.getTextContent();
+	        		break;
+	        	}
+	        }
+		} 
+        catch(ParserConfigurationException e)
+        {
+        	JOptionPane.showMessageDialog(this, e.getMessage() + " | Using default settings", "Parser Configuration Exception", JOptionPane.ERROR_MESSAGE); 
+        	return; 
+        }
+        catch(SAXException e)
+        {
+        	JOptionPane.showMessageDialog(this, e.getMessage() + " | Using default settings", "SAX Exception", JOptionPane.ERROR_MESSAGE);  
+        	return;            
+        }
+        catch(IOException e)
+        {
+        	//JOptionPane.showMessageDialog(this, e.getMessage() + " | Using default settings", "IO Exception", JOptionPane.ERROR_MESSAGE); 
+        }
+    	System.out.println("Finished Loading Settings\n");
+		
+		if(exeDirectory.isEmpty()) {
+        	if(JOptionPane.showConfirmDialog(this, "Set game .exe directory now?", ".exe Directory Not Set", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        		setExeLocation();
+        	}
+        	else {
+        		
+        	}
+		}
+	}
+    
+    private void saveSettings() {
+    	
+    	System.out.println("\nSaving Settings...");
+        try
+        {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.newDocument();
+            
+            Element root = doc.createElement("Settings");
+            
+            Element chooserDir = doc.createElement("FileChooserDir");
+            chooserDir.setTextContent(fileChooser.getCurrentDirectory().getPath());
+        	System.out.println("FileChooserDir: " + fileChooser.getCurrentDirectory().getPath());
+            
+            Element exeDir = doc.createElement("ExeDir");
+            exeDir.setTextContent(exeDirectory);
+        	System.out.println("ExeDir: " + exeDirectory);
+            
+            root.appendChild(chooserDir);
+            root.appendChild(exeDir);
+            doc.appendChild(root);
+            
+            //finally, save the file
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File("settings.xml"));
+            transformer.transform(source, result);
+        }
+        catch(ParserConfigurationException e)
+        {
+        	JOptionPane.showMessageDialog(this, e.getMessage(), "Parser Configuration Exception", JOptionPane.ERROR_MESSAGE);  
+            
+        }
+        catch(TransformerConfigurationException e)
+        {
+        	JOptionPane.showMessageDialog(this, e.getMessage(), "Transformer Configuration Exception", JOptionPane.ERROR_MESSAGE);
+        }
+        catch(TransformerException e)
+        {
+        	JOptionPane.showMessageDialog(this, e.getMessage(), "Transformer Exception", JOptionPane.ERROR_MESSAGE);   
+        }
+        catch(Exception e)
+        {
+        	
+        }
+    }
+    
+    private void setExeLocation() {
+    	
+    	File lastFile = fileChooser.getCurrentDirectory();
+    	
+    	fileChooser = new JFileChooser(exeDirectory);
+    	fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    	int returnVal = fileChooser.showDialog(this, "Choose .exe Location");
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            exeDirectory = fileChooser.getSelectedFile().getAbsolutePath();
+            System.out.println(exeDirectory);
+        } else {
+            
+        }
+        fileChooser = new JFileChooser(lastFile);
+    }
+    
+    
     public void setCurrentlyLoadedStage(HSStage newStage)
     {
         currentlyLoadedStage = newStage;
-        setTitle(BaseWindowTitle + currentlyLoadedStage.name);
+        setTitle(BaseWindowTitle + "Stage Loaded");
         textureObjectPane.setStage(currentlyLoadedStage);
         objectListPane.loadStageObjects(currentlyLoadedStage);
     }
@@ -235,7 +388,7 @@ public class EditorWindow extends JFrame implements ActionListener {
     
     public String createAbsolutePath(String relPath)
     {
-    	return createAbsolutePathFrom(relPath, currentFile.getParent());
+    	return createAbsolutePathFrom(relPath, workingDirectory);
     }
     
     public String createAbsolutePathFrom(String relPath, String fromPath)
@@ -256,7 +409,7 @@ public class EditorWindow extends JFrame implements ActionListener {
     
     public String createRelativePath(String absPath)
     {
-    	return createPathRelativeTo(absPath, currentFile.getParent());
+    	return createPathRelativeTo(absPath, workingDirectory);
     }
     
     public String createPathRelativeTo(String absPath, String relativeTo)
@@ -311,12 +464,13 @@ public class EditorWindow extends JFrame implements ActionListener {
 		case "save": save(); break;
 		case "saveAs": saveAs(); break;
 		case "delete": delete(); break;
+        case "exeLocation": setExeLocation(); break;
 		}
 	}
 
 	private void newStage() {
 		currentlyLoadedStage = new HSStage();
-		currentFile = null;
+		workingDirectory = "";
 		setCurrentlyLoadedStage(currentlyLoadedStage);
 	}
 
@@ -335,7 +489,8 @@ public class EditorWindow extends JFrame implements ActionListener {
             return;
         }
 
-        currentFile = file;
+        workingDirectory = file.getParent();
+        curFile = file;
         
         //Now that we have a working directory, we can save
         save();
@@ -343,7 +498,7 @@ public class EditorWindow extends JFrame implements ActionListener {
 
 	private void save() {
         //If we don't have a working directory or a loaded object, we should save as instead (save as can handle the lack of a loaded object as well)
-        if(currentlyLoadedStage == null || currentFile == null) { saveAs(); }
+        if(currentlyLoadedStage == null || workingDirectory == "") { saveAs(); }
         
         //if(!currentFile.exists()) { return; }
         
@@ -359,6 +514,7 @@ public class EditorWindow extends JFrame implements ActionListener {
             Document doc = dBuilder.newDocument();
             
             Element root = doc.createElement("HSStage");
+            root.setAttribute("version", "" + XML_FORMAT_VERSION);
             root.setAttribute("gravity", "" + currentlyLoadedStage.gravity);
             root.setAttribute("width", "" + currentlyLoadedStage.width);
             root.setAttribute("height", "" + currentlyLoadedStage.height);
@@ -368,7 +524,7 @@ public class EditorWindow extends JFrame implements ActionListener {
             Element objects = doc.createElement("Objects");
             for(HSObject obj : currentlyLoadedStage.objects) {
             	Element object = doc.createElement("Object");
-            	object.setAttribute("defFilePath", createRelativePath(obj.defPath));
+            	object.setAttribute("defFilePath", createPathRelativeTo(obj.defPath, exeDirectory));
             	object.setAttribute("posX", "" + obj.pos.x);
             	object.setAttribute("posY", "" + obj.pos.y);
             	object.setAttribute("depth", "" + obj.depth);
@@ -381,7 +537,7 @@ public class EditorWindow extends JFrame implements ActionListener {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(currentFile);
+            StreamResult result = new StreamResult(curFile.getAbsolutePath());
             transformer.transform(source, result);
 		}
         catch(ParserConfigurationException e)
@@ -409,7 +565,8 @@ public class EditorWindow extends JFrame implements ActionListener {
             return;
         }
 
-        currentFile = file;
+        workingDirectory = file.getParent();
+        curFile = file;
         
         try {
         	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -417,10 +574,16 @@ public class EditorWindow extends JFrame implements ActionListener {
         	Document doc = dBuilder.parse(file);
         	doc.getDocumentElement().normalize();
         	
+        	int version = 0;
+        	
         	if(doc.getDocumentElement().getNodeName().compareTo("HSStage") != 0) {
             	JOptionPane.showMessageDialog(this, "Root node of Stage is not 'HSStage'", "Error", JOptionPane.ERROR_MESSAGE);  
             	return;
         	}
+            
+            if(!doc.getDocumentElement().getAttribute("version").isEmpty()) version = Integer.parseInt(doc.getDocumentElement().getAttribute("version"));
+            
+            System.out.println("Loading object with xml format version: " + version);
         	
         	HSStage loadStage = new HSStage();
         	
@@ -441,7 +604,7 @@ public class EditorWindow extends JFrame implements ActionListener {
                 		NamedNodeMap objectAttributes = objects.item(j).getAttributes();
                 		if(objectAttributes == null) continue;
                 		if(objectAttributes.getNamedItem("defFilePath") == null) continue;
-                		HSObject hsobject = HSObject.ObjectFromDefinition(file.getParent() + File.separator, objectAttributes.getNamedItem("defFilePath").getNodeValue(), objectAttributes, this);
+                		HSObject hsobject = HSObject.ObjectFromDefinition(exeDirectory.isEmpty() ? workingDirectory : exeDirectory, objectAttributes.getNamedItem("defFilePath").getNodeValue(), objectAttributes, this);
                 		if(hsobject != null)
                 			loadStage.objects.add(hsobject);
                 	}

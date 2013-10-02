@@ -21,7 +21,7 @@ public class HSObject {
 	public String texturePath = "";
 	public String defPath = "";
 	public HSVect2D pos = new HSVect2D();
-	public int depth = 0;
+	public double depth = 0.0;
 
 	public HSObject() {
 		
@@ -62,12 +62,13 @@ public class HSObject {
         		if(n.getNodeType() == Node.ELEMENT_NODE) {
         			NamedNodeMap textureAttr = n.getAttributes();
         			if(textureAttr.getNamedItem("textureFilePath") != null) { 
-        				texPath = textureAttr.getNamedItem("textureFilePath").getNodeValue();
+        				texPath = window.createAbsolutePathFrom(textureAttr.getNamedItem("textureFilePath").getNodeValue(), window.exeDirectory);
         				break;
         			}
         		}
         	}
-        	hsobject.texturePath = def.getParent() + File.separator + texPath;
+        	System.out.println(texPath);
+        	hsobject.texturePath = texPath;
         	hsobject.name = def.getName();
 		} 
         catch(ParserConfigurationException e) {
@@ -86,7 +87,7 @@ public class HSObject {
 		HSObject hsobject = null;
 		String texPath = "";
 		try {
-			File file = new File(dir + defPath);
+			File file = new File(dir + File.separator + defPath);
         	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         	Document doc = dBuilder.parse(file);
@@ -104,19 +105,19 @@ public class HSObject {
         		if(n.getNodeType() == Node.ELEMENT_NODE) {
         			NamedNodeMap textureAttr = n.getAttributes();
         			if(textureAttr.getNamedItem("textureFilePath") != null) { 
-        				texPath = textureAttr.getNamedItem("textureFilePath").getNodeValue();
+        				texPath = window.createAbsolutePathFrom(textureAttr.getNamedItem("textureFilePath").getNodeValue(), dir);
         				break;
         			}
         		}
         	}
         	hsobject = new HSObject();
-        	hsobject.texturePath = file.getParent() + File.separator + texPath;
-        	hsobject.defPath = window.createAbsolutePath(defPath);
+        	hsobject.texturePath = texPath;
+        	hsobject.defPath = window.createAbsolutePathFrom(defPath, dir);
         	hsobject.name = defPath;
 
         	if(attributes.getNamedItem("posX") != null) hsobject.pos.x = Float.parseFloat(attributes.getNamedItem("posX").getNodeValue());
         	if(attributes.getNamedItem("posY") != null) hsobject.pos.y = Float.parseFloat(attributes.getNamedItem("posY").getNodeValue());
-        	if(attributes.getNamedItem("depth") != null) hsobject.depth = Integer.parseInt(attributes.getNamedItem("depth").getNodeValue());
+        	if(attributes.getNamedItem("depth") != null) hsobject.depth = Double.parseDouble(attributes.getNamedItem("depth").getNodeValue());
         	
         	System.out.println(hsobject);
 		} 

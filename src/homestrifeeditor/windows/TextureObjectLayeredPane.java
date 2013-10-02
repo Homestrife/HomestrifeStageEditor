@@ -17,6 +17,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
+import com.sun.java.swing.plaf.windows.WindowsInternalFrameTitlePane.ScalableIconUIResource;
+
 public class TextureObjectLayeredPane extends JLayeredPane implements MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 1L;
 	
@@ -46,7 +48,7 @@ public class TextureObjectLayeredPane extends JLayeredPane implements MouseListe
 			if(texLabel.getIcon() == null) return;
 			texLabel.setVisible(true);
 
-			add(texLabel, new Integer(-obj.depth));
+			add(texLabel, new Double(-obj.depth));
 		}
 		repaint();
 	}

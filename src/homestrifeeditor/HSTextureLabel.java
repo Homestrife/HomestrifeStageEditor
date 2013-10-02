@@ -54,6 +54,7 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
         setIcon(icon);
         setText("");
         setName("texture");
+        System.out.println(": " + texture.filePath);
         setMinimumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
         setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
         Point pos = parent.parent.getSwingOffset(texture.offset.x, texture.offset.y);
