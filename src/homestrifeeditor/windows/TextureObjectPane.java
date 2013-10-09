@@ -22,8 +22,8 @@ import javax.swing.ScrollPaneConstants;
 public class TextureObjectPane  extends JPanel implements ActionListener, ItemListener {
 	private static final long serialVersionUID = 1L;
 	
-	public static int textureObjectPaneWidth = 1920 * 4;
-    public static int textureObjectPaneHeight = 1080 * 4;
+	public static int textureObjectPaneWidth = 1920 * 8;
+    public static int textureObjectPaneHeight = 1080 * 8;
     
     public EditorWindow parent;
     public HSStage stage;
