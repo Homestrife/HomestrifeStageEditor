@@ -525,8 +525,8 @@ public class EditorWindow extends JFrame implements ActionListener {
             for(HSObject obj : currentlyLoadedStage.objects) {
             	Element object = doc.createElement("Object");
             	object.setAttribute("defFilePath", createPathRelativeTo(obj.defPath, exeDirectory));
-            	object.setAttribute("posX", "" + obj.pos.x);
-            	object.setAttribute("posY", "" + obj.pos.y);
+            	object.setAttribute("posX", "" + (obj.pos.x - obj.offsetX));
+            	object.setAttribute("posY", "" + (obj.pos.y - obj.offsetY));
             	object.setAttribute("depth", "" + obj.depth);
             	objects.appendChild(object);
             }

@@ -19,6 +19,7 @@ import org.xml.sax.SAXException;
 public class HSObject {
 	public String name = "HSObject";
 	public String texturePath = "";
+	public float offsetX = 0, offsetY = 0;
 	public String defPath = "";
 	public HSVect2D pos = new HSVect2D();
 	public double depth = 0.0;
@@ -43,6 +44,8 @@ public class HSObject {
 		HSObject hsobject = new HSObject();
 		hsobject.defPath = def.getPath();
 		String texPath = "";
+		float offsetX = 0;
+		float offsetY = 0;
 		//All this work for the freakin texure
 		try {
         	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -63,13 +66,18 @@ public class HSObject {
         			NamedNodeMap textureAttr = n.getAttributes();
         			if(textureAttr.getNamedItem("textureFilePath") != null) { 
         				texPath = window.createAbsolutePathFrom(textureAttr.getNamedItem("textureFilePath").getNodeValue(), window.exeDirectory);
+        				offsetX = Float.parseFloat(textureAttr.getNamedItem("offsetX").getNodeValue());
+        				offsetY = Float.parseFloat(textureAttr.getNamedItem("offsetY").getNodeValue());
         				break;
         			}
         		}
         	}
         	System.out.println(texPath);
         	hsobject.texturePath = texPath;
+        	hsobject.offsetX = offsetX;
+        	hsobject.offsetY = offsetY;
         	hsobject.name = def.getName();
+        	hsobject.pos = new HSVect2D(offsetX, offsetY);
 		} 
         catch(ParserConfigurationException e) {
         	JOptionPane.showMessageDialog(null, e.getMessage(), "Parser Configuration Exception", JOptionPane.ERROR_MESSAGE);  
@@ -86,6 +94,8 @@ public class HSObject {
 	public static HSObject ObjectFromDefinition(String dir, String defPath, NamedNodeMap attributes, EditorWindow window) {
 		HSObject hsobject = null;
 		String texPath = "";
+		float offsetX = 0;
+		float offsetY = 0;
 		try {
 			File file = new File(dir + File.separator + defPath);
         	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -106,6 +116,8 @@ public class HSObject {
         			NamedNodeMap textureAttr = n.getAttributes();
         			if(textureAttr.getNamedItem("textureFilePath") != null) { 
         				texPath = window.createAbsolutePathFrom(textureAttr.getNamedItem("textureFilePath").getNodeValue(), dir);
+        				offsetX = Float.parseFloat(textureAttr.getNamedItem("offsetX").getNodeValue());
+        				offsetY = Float.parseFloat(textureAttr.getNamedItem("offsetY").getNodeValue());
         				break;
         			}
         		}
@@ -114,9 +126,11 @@ public class HSObject {
         	hsobject.texturePath = texPath;
         	hsobject.defPath = window.createAbsolutePathFrom(defPath, dir);
         	hsobject.name = defPath;
+        	hsobject.offsetX = offsetX;
+        	hsobject.offsetY = offsetY;
 
-        	if(attributes.getNamedItem("posX") != null) hsobject.pos.x = Float.parseFloat(attributes.getNamedItem("posX").getNodeValue());
-        	if(attributes.getNamedItem("posY") != null) hsobject.pos.y = Float.parseFloat(attributes.getNamedItem("posY").getNodeValue());
+        	if(attributes.getNamedItem("posX") != null) hsobject.pos.x = Float.parseFloat(attributes.getNamedItem("posX").getNodeValue()) + offsetX;
+        	if(attributes.getNamedItem("posY") != null) hsobject.pos.y = Float.parseFloat(attributes.getNamedItem("posY").getNodeValue()) + offsetY;
         	if(attributes.getNamedItem("depth") != null) hsobject.depth = Double.parseDouble(attributes.getNamedItem("depth").getNodeValue());
         	
         	System.out.println(hsobject);

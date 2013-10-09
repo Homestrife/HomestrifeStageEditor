@@ -18,6 +18,11 @@ public class HSVect2D {
         y = 0;
     }
     
+    public HSVect2D(float nx, float ny) {
+    	x = nx;
+    	y = ny;
+    }
+    
     public HSVect2D(HSVect2D v) {
     	//Thats one deep copy
     	x = v.x;
