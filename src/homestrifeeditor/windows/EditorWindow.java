@@ -34,6 +34,10 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -573,6 +577,7 @@ public class EditorWindow extends JFrame implements ActionListener {
         	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         	Document doc = dBuilder.parse(file);
         	doc.getDocumentElement().normalize();
+        	removeWhitespaceNodes(doc);
         	
         	int version = 0;
         	
@@ -628,6 +633,24 @@ public class EditorWindow extends JFrame implements ActionListener {
 	private void delete() {
 		textureObjectPane.textureObjectLayeredPane.removeSelected();
 	}
+    
+	//Found on Google
+    private static void removeWhitespaceNodes(Document doc) {
+    	XPath xp = XPathFactory.newInstance().newXPath();
+	    NodeList nl;
+		try {
+			nl = (NodeList) xp.evaluate("//text()[normalize-space(.)='']", doc, XPathConstants.NODESET);
+		} catch (XPathExpressionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		}
+	
+	    for (int i=0; i < nl.getLength(); ++i) {
+	        Node node = nl.item(i);
+	        node.getParentNode().removeChild(node);
+	    }
+    }
 	
 	private class KeyDispatcher implements KeyEventDispatcher {
 		@Override
