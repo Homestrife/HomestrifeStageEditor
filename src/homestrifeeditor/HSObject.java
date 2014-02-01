@@ -72,7 +72,6 @@ public class HSObject {
         			}
         		}
         	}
-        	System.out.println(texPath);
         	hsobject.texturePath = texPath;
         	hsobject.offsetX = offsetX;
         	hsobject.offsetY = offsetY;
@@ -94,6 +93,8 @@ public class HSObject {
 	public static HSObject ObjectFromDefinition(String dir, String defPath, NamedNodeMap attributes, EditorWindow window) {
 		HSObject hsobject = null;
 		String texPath = "";
+		defPath = defPath.replace("/", File.separator);
+		defPath = defPath.replace("\\", File.separator);
 		float offsetX = 0;
 		float offsetY = 0;
 		try {

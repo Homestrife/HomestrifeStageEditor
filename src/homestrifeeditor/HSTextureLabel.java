@@ -50,15 +50,16 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
     
     private void loadIcon() {
     	icon = TGAReader.loadTGA(texture.filePath, "");
-    		
+
         setIcon(icon);
         setText("");
         setName("texture");
-        System.out.println(": " + texture.filePath);
-        setMinimumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
-        setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
         Point pos = parent.parent.getSwingOffset(texture.offset.x, texture.offset.y);
-        setBounds(pos.x, pos.y, icon.getIconWidth(), icon.getIconHeight());		
+        if(icon != null) {
+	        setMinimumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
+	        setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
+	        setBounds(pos.x, pos.y, icon.getIconWidth(), icon.getIconHeight());	
+        }	
 	}
 
 	@Override

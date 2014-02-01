@@ -275,7 +275,7 @@ public class TGAReader {
         }
         catch(FileNotFoundException e)
         {
-        	JOptionPane.showMessageDialog(null, e.getMessage(), "File Not Found Exception", JOptionPane.ERROR_MESSAGE);   
+        	JOptionPane.showMessageDialog(null, "\"" + texFilePath + "\": " + e.getMessage(), "File Not Found Exception", JOptionPane.ERROR_MESSAGE);   
             return null;
         }
         catch(IOException e)

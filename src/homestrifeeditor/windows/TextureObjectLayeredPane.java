@@ -45,7 +45,7 @@ public class TextureObjectLayeredPane extends JLayeredPane implements MouseListe
 		removeAll();
 		for(HSObject obj : stage.objects) {
 			HSTextureLabel texLabel = new HSTextureLabel(obj, this, new HSTexture(obj.texturePath, -obj.depth, obj.pos));
-			if(texLabel.getIcon() == null) return;
+			if(texLabel.getIcon() == null) continue;
 			texLabel.setVisible(true);
 
 			add(texLabel, new Double(-obj.depth));
