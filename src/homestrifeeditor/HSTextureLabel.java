@@ -1,5 +1,6 @@
 package homestrifeeditor;
 
+import homestrifeeditor.windows.EditorWindow;
 import homestrifeeditor.windows.TextureObjectLayeredPane;
 
 import java.awt.Component;
@@ -50,16 +51,18 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
     
     private void loadIcon() {
     	icon = TGAReader.loadTGA(texture.filePath, "");
+    	if(icon == null)
+    		return;
+    	icon = EditorWindow.resize(icon);
 
         setIcon(icon);
         setText("");
         setName("texture");
-        Point pos = parent.parent.getSwingOffset(texture.offset.x, texture.offset.y);
-        if(icon != null) {
-	        setMinimumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
-	        setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
-	        setBounds(pos.x, pos.y, icon.getIconWidth(), icon.getIconHeight());	
-        }	
+        
+    	Point pos = parent.parent.getSwingOffset(texture.offset.x * EditorWindow.scale, texture.offset.y * EditorWindow.scale);
+    	setMinimumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
+        setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
+        setBounds(pos.x, pos.y, icon.getIconWidth(), icon.getIconHeight());	
 	}
 
 	@Override
@@ -70,8 +73,8 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
         
         if(c == null) { return ; }
         
-        int xDiff = e.getX() - mouseStartX;
-        int yDiff = e.getY() - mouseStartY;
+        float xDiff = e.getX() - mouseStartX;
+        float yDiff = e.getY() - mouseStartY;
         
         if(Math.abs(xDiff) >= mouseMoveThreshold || Math.abs(yDiff) >= mouseMoveThreshold)
         {
@@ -83,7 +86,7 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
         texture.offset.x = texture.offset.x + xDiff;
         texture.offset.y = texture.offset.y + yDiff;
         
-        Point pos = parent.parent.getSwingOffset(texture.offset.x, texture.offset.y);
+        Point pos = parent.parent.getSwingOffset(texture.offset.x * EditorWindow.scale, texture.offset.y * EditorWindow.scale);
         setBounds(pos.x, pos.y, icon.getIconWidth(), icon.getIconHeight());
         
         parent.repaint();

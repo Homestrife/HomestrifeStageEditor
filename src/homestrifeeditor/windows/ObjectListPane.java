@@ -328,8 +328,8 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
 			if(sel != null) {
 				JScrollPane scrollPane = parent.textureObjectPane.textureObjectScrollPane;
 				scrollPane.revalidate();
-				scrollPane.getHorizontalScrollBar().setValue((int) sel.pos.x + (scrollPane.getHorizontalScrollBar().getMinimum() + scrollPane.getHorizontalScrollBar().getMaximum()) / 2);
-				scrollPane.getVerticalScrollBar().setValue((int) sel.pos.y + (scrollPane.getVerticalScrollBar().getMinimum() + scrollPane.getVerticalScrollBar().getMaximum()) / 2);
+				scrollPane.getHorizontalScrollBar().setValue((int) (sel.pos.x * EditorWindow.scale) + (scrollPane.getHorizontalScrollBar().getMinimum() + scrollPane.getHorizontalScrollBar().getMaximum()) / 2);
+				scrollPane.getVerticalScrollBar().setValue((int) (sel.pos.y * EditorWindow.scale) + (scrollPane.getVerticalScrollBar().getMinimum() + scrollPane.getVerticalScrollBar().getMaximum()) / 2);
 			}
 		}
 	}

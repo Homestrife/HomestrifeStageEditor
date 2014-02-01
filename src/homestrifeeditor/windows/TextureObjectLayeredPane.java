@@ -4,7 +4,6 @@ import homestrifeeditor.HSObject;
 import homestrifeeditor.HSStage;
 import homestrifeeditor.HSTexture;
 import homestrifeeditor.HSTextureLabel;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -16,8 +15,6 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-
-import com.sun.java.swing.plaf.windows.WindowsInternalFrameTitlePane.ScalableIconUIResource;
 
 public class TextureObjectLayeredPane extends JLayeredPane implements MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 1L;

@@ -4,17 +4,21 @@ import homestrifeeditor.HSObject;
 import homestrifeeditor.HSStage;
 
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -55,6 +59,8 @@ public class EditorWindow extends JFrame implements ActionListener {
 	public static String BaseWindowTitle = "Homestrife Stage Editor - ";
     public static int windowWidth = 1000;
     public static int windowHeight = 600;
+    
+    public static float scale = .1f;
     
     public String workingDirectory = "";
     public String exeDirectory = "";
@@ -650,6 +656,17 @@ public class EditorWindow extends JFrame implements ActionListener {
 	        Node node = nl.item(i);
 	        node.getParentNode().removeChild(node);
 	    }
+    }
+    
+    public static ImageIcon resize(ImageIcon icon) {
+    	int width = (int) (icon.getIconWidth() * scale);
+    	int height = (int) (icon.getIconHeight() * scale);
+        BufferedImage bi = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
+        Graphics2D g2d = (Graphics2D) bi.createGraphics();
+        g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
+        g2d.drawImage(icon.getImage(), 0, 0, width, height, null);
+        g2d.dispose();
+        return new ImageIcon(bi);
     }
 	
 	private class KeyDispatcher implements KeyEventDispatcher {
