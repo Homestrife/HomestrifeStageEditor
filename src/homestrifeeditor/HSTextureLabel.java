@@ -19,7 +19,8 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
 	public TextureObjectLayeredPane parent;
 	public HSTexture texture;
     public HSObject parentObject;
-	public ImageIcon icon;
+	public ImageIcon icon = null;
+	public ImageIcon originalIcon = null;
 	
 	private int mouseStartX;
 	private int mouseStartY;
@@ -50,10 +51,17 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
     }
     
     public void loadIcon() {
-    	icon = TGAReader.loadTGA(texture.filePath, "");
-    	if(icon == null)
+    	if(originalIcon == null) {
+    		originalIcon = TGAReader.loadTGA(texture.filePath, "");
+    	}
+    	
+    	if(originalIcon == null) 
     		return;
-    	icon = EditorWindow.resize(icon);
+    	
+    	icon = EditorWindow.resize(originalIcon);
+    	if(icon == null) {
+    		return;
+    	}
 
         setIcon(icon);
         setText("");
