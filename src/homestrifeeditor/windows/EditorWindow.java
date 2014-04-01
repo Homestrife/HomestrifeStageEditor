@@ -296,6 +296,10 @@ public class EditorWindow extends JFrame implements ActionListener {
 	        		if(node.getTextContent() != null)
 	        			exeDirectory = node.getTextContent();
 	        		break;
+	        	case "Scale":
+	        		if(node.getTextContent() != null)
+	        			scale = Float.parseFloat(node.getTextContent());
+	        		break;
 	        	}
 	        }
 		} 
@@ -336,16 +340,21 @@ public class EditorWindow extends JFrame implements ActionListener {
             
             Element root = doc.createElement("Settings");
             
-            Element chooserDir = doc.createElement("FileChooserDir");
-            chooserDir.setTextContent(fileChooser.getCurrentDirectory().getPath());
+            Element chooserDirSetting = doc.createElement("FileChooserDir");
+            chooserDirSetting.setTextContent(fileChooser.getCurrentDirectory().getPath());
         	System.out.println("FileChooserDir: " + fileChooser.getCurrentDirectory().getPath());
             
-            Element exeDir = doc.createElement("ExeDir");
-            exeDir.setTextContent(exeDirectory);
+            Element exeDirSetting = doc.createElement("ExeDir");
+            exeDirSetting.setTextContent(exeDirectory);
         	System.out.println("ExeDir: " + exeDirectory);
+        	
+        	Element scaleSetting = doc.createElement("Scale");
+        	scaleSetting.setTextContent("" + scale);
+        	System.out.println("Scale: " + scale);
             
-            root.appendChild(chooserDir);
-            root.appendChild(exeDir);
+            root.appendChild(chooserDirSetting);
+            root.appendChild(exeDirSetting);
+            root.appendChild(scaleSetting);
             doc.appendChild(root);
             
             //finally, save the file
