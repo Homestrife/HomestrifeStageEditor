@@ -103,135 +103,124 @@ public class EditorWindow extends JFrame implements ActionListener {
     private void createMenuBar()
     {
         JMenuBar menuBar;
-        JMenu file;
-        JMenuItem newStage;
-        JMenuItem generate;
-        JMenuItem open;
-        JMenuItem save;
-        JMenuItem saveAs;
-        JMenuItem importAnimation;
-        JMenuItem setExeLocation;
-        JMenu edit;
-        JMenuItem undo;
-        JMenuItem redo;
-        JMenuItem cut;
-        JMenuItem copy;
-        JMenuItem paste;
-        JMenuItem delete;
-        JMenuItem selectAll;
-        JMenu object;
-        JMenuItem objectAttributes;
-        JMenuItem eventHolds;
-        JMenu help;
-        JMenuItem helpContent;
-        JMenuItem about;
+        JMenu fileMenu;
+        JMenuItem newStageItem, generateItem, openItem, saveItem, saveAsItem, importAnimationItem, setExeLocationItem;
+        JMenu editMenu;
+        JMenuItem undoItem, redoItem, cutItem, copyItem, pasteItem, deleteItem, selectAllItem;
+        JMenu objectMenu;
+        JMenuItem objectAttributesItem, eventHoldsItem;
+        JMenu helpMenu;
+        JMenuItem helpContentItem, aboutItem;
         
         menuBar = new JMenuBar();
         
-        file = new JMenu("File");
-        newStage = new JMenuItem("New");
-        newStage.setActionCommand("new");
-        newStage.addActionListener(this);
+        fileMenu = new JMenu("File");
+        newStageItem = new JMenuItem("New");
+        newStageItem.setActionCommand("new");
+        newStageItem.addActionListener(this);
         //
-        generate = new JMenuItem("Generate...");
-        generate.setActionCommand("generate");
-        generate.addActionListener(this);
+        generateItem = new JMenuItem("Generate...");
+        generateItem.setActionCommand("generate");
+        generateItem.addActionListener(this);
         //
-        open = new JMenuItem("Open...");
-        open.setActionCommand("open");
-        open.addActionListener(this);
+        openItem = new JMenuItem("Open...");
+        openItem.setActionCommand("open");
+        openItem.addActionListener(this);
         //
-        save = new JMenuItem("Save");
-        save.setActionCommand("save");
-        save.addActionListener(this);
-        save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+        saveItem = new JMenuItem("Save");
+        saveItem.setActionCommand("save");
+        saveItem.addActionListener(this);
+        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
         //
-        saveAs = new JMenuItem("Save As...");
-        saveAs.setActionCommand("saveAs");
-        saveAs.addActionListener(this);
+        saveAsItem = new JMenuItem("Save As...");
+        saveAsItem.setActionCommand("saveAs");
+        saveAsItem.addActionListener(this);
         //
-        importAnimation = new JMenuItem("Import Animation");
-        importAnimation.setActionCommand("importAnimation");
-        importAnimation.addActionListener(this);
+        importAnimationItem = new JMenuItem("Import Animation");
+        importAnimationItem.setActionCommand("importAnimation");
+        importAnimationItem.addActionListener(this);
         //
-        setExeLocation = new JMenuItem("Set Game Location");
-        setExeLocation.setActionCommand("exeLocation");
-        setExeLocation.addActionListener(this);
+        setExeLocationItem = new JMenuItem("Set Game Location");
+        setExeLocationItem.setActionCommand("exeLocation");
+        setExeLocationItem.addActionListener(this);
         //
-        file.add(newStage);
-        file.add(generate);
-        file.add(open);
-        file.add(save);
-        file.add(saveAs);
-        file.add(new JSeparator());
-        //file.add(importAnimation);
-        file.add(setExeLocation);
-        menuBar.add(file);
+        fileMenu.add(newStageItem);
+        fileMenu.add(generateItem);
+        fileMenu.add(openItem);
+        fileMenu.add(saveItem);
+        fileMenu.add(saveAsItem);
+        fileMenu.add(new JSeparator());
+        fileMenu.add(setExeLocationItem);
+        menuBar.add(fileMenu);
         
-        edit = new JMenu("Edit");
+        editMenu = new JMenu("Edit");
         //
-        undo = new JMenuItem("Undo");
-        undo.setActionCommand("undo");
-        undo.addActionListener(this);
-        undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
+        undoItem = new JMenuItem("Undo");
+        undoItem.setActionCommand("undo");
+        undoItem.addActionListener(this);
+        undoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
         //
-        redo = new JMenuItem("Redo");
-        redo.setActionCommand("redo");
-        redo.addActionListener(this);
+        redoItem = new JMenuItem("Redo");
+        redoItem.setActionCommand("redo");
+        redoItem.addActionListener(this);
         //
-        cut = new JMenuItem("Cut");
-        cut.setActionCommand("cut");
-        cut.addActionListener(this);
-        cut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
+        cutItem = new JMenuItem("Cut");
+        cutItem.setActionCommand("cut");
+        cutItem.addActionListener(this);
+        cutItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
         //
-        copy = new JMenuItem("Copy");
-        copy.setActionCommand("copy");
-        copy.addActionListener(this);
-        copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
+        copyItem = new JMenuItem("Copy");
+        copyItem.setActionCommand("copy");
+        copyItem.addActionListener(this);
+        copyItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
         //
-        paste = new JMenuItem("Paste");
-        paste.setActionCommand("paste");
-        paste.addActionListener(this);
-        paste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK));
+        pasteItem = new JMenuItem("Paste");
+        pasteItem.setActionCommand("paste");
+        pasteItem.addActionListener(this);
+        pasteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK));
         //
-        delete = new JMenuItem("Delete");
-        delete.setActionCommand("delete");
-        delete.addActionListener(this);
-        delete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
+        deleteItem = new JMenuItem("Delete");
+        deleteItem.setActionCommand("delete");
+        deleteItem.addActionListener(this);
+        deleteItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
         //
-        selectAll = new JMenuItem("Select All");
-        selectAll.setActionCommand("selectAll");
-        selectAll.addActionListener(this);
-        selectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.ALT_DOWN_MASK));
+        selectAllItem = new JMenuItem("Select All");
+        selectAllItem.setActionCommand("selectAll");
+        selectAllItem.addActionListener(this);
+        selectAllItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.ALT_DOWN_MASK));
         //
         
-        edit.add(undo);
-        edit.add(redo);
-        edit.add(new JSeparator());
-        edit.add(cut);
-        edit.add(copy);
-        edit.add(paste);
-        edit.add(delete);
-        edit.add(selectAll);
-        menuBar.add(edit);
+        editMenu.add(undoItem);
+        editMenu.add(redoItem);
+        editMenu.add(new JSeparator());
+        editMenu.add(cutItem);
+        editMenu.add(copyItem);
+        editMenu.add(pasteItem);
+        editMenu.add(deleteItem);
+        editMenu.add(selectAllItem);
+        menuBar.add(editMenu);
         
-        object = new JMenu("Object");
-        objectAttributes = new JMenuItem("Attributes");
-        eventHolds = new JMenuItem("Event Holds");
-        objectAttributes.addActionListener(this);
-        eventHolds.addActionListener(this);
-        objectAttributes.setActionCommand("objectAttributes");
-        eventHolds.setActionCommand("eventHolds");
-        object.add(objectAttributes);
-        object.add(eventHolds);
+        objectMenu = new JMenu("Object");
+        //
+        objectAttributesItem = new JMenuItem("Attributes");
+        objectAttributesItem.setActionCommand("objectAttributes");
+        objectAttributesItem.addActionListener(this);
+        //
+        eventHoldsItem = new JMenuItem("Event Holds");
+        eventHoldsItem.addActionListener(this);
+        eventHoldsItem.setActionCommand("eventHolds");
+        //
+        
+        objectMenu.add(objectAttributesItem);
+        objectMenu.add(eventHoldsItem);
         //menuBar.add(object);     
         
-        help = new JMenu("Help");
-        helpContent = new JMenuItem("Help Content");
-        about = new JMenuItem("About");
-        help.add(helpContent);
-        help.add(about);
-        menuBar.add(help);
+        helpMenu = new JMenu("Help");
+        helpContentItem = new JMenuItem("Help Content");
+        aboutItem = new JMenuItem("About");
+        helpMenu.add(helpContentItem);
+        helpMenu.add(aboutItem);
+        menuBar.add(helpMenu);
         
         setJMenuBar(menuBar);
     }
@@ -260,7 +249,7 @@ public class EditorWindow extends JFrame implements ActionListener {
 	        Node root = doc.getDocumentElement();
 	        if(root.getNodeName().compareTo("Settings") != 0)
 	        {
-	        	JOptionPane.showMessageDialog(this, "Settings file has invalid root", "Error loading settings", JOptionPane.ERROR_MESSAGE); 
+	        	JOptionPane.showMessageDialog(this, "Settings file has invalid root, expected <Settings>", "Error loading settings", JOptionPane.ERROR_MESSAGE); 
 	        	return; 
 	        }
 	        
@@ -352,12 +341,11 @@ public class EditorWindow extends JFrame implements ActionListener {
         }
         catch(Exception e)
         {
-        	
+        	JOptionPane.showMessageDialog(this, e.getMessage(), "Exception", JOptionPane.ERROR_MESSAGE);
         }
     }
     
     private void setExeLocation() {
-    	
     	File lastFile = fileChooser.getCurrentDirectory();
     	
     	fileChooser = new JFileChooser(exeDirectory);
@@ -365,7 +353,7 @@ public class EditorWindow extends JFrame implements ActionListener {
     	int returnVal = fileChooser.showDialog(this, "Choose .exe Location");
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             exeDirectory = fileChooser.getSelectedFile().getAbsolutePath();
-            System.out.println(exeDirectory);
+            System.out.println("Set .exe Directory: " + exeDirectory);
         } else {
             
         }
@@ -433,7 +421,7 @@ public class EditorWindow extends JFrame implements ActionListener {
             return "";
         }
         
-        //compare each until either one ends or a point of divergeance is found
+        //compare each until either one ends or a point of divergence is found
         int end = relativeToPieces.length > absPathPieces.length ? absPathPieces.length : relativeToPieces.length;
         int divergeancePoint = end;
         for(int i = 0; i < end; i++)
@@ -452,7 +440,7 @@ public class EditorWindow extends JFrame implements ActionListener {
             relativePath += ".." + File.separator;
         }
         
-        //add the absolute path starting with the divergeance point
+        //add the absolute path starting with the divergence point
         for(int i = divergeancePoint; i < absPathPieces.length; i++)
         {
             if(i > divergeancePoint)
@@ -467,7 +455,7 @@ public class EditorWindow extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(e.getActionCommand());
+		System.out.println("Action Preformed: " + e.getActionCommand());
 		switch(e.getActionCommand()) {
 		case "new": newStage(); break;
 		case "open": open(); break;
@@ -507,10 +495,8 @@ public class EditorWindow extends JFrame implements ActionListener {
 	}
 
 	private void save() {
-        //If we don't have a working directory or a loaded object, we should save as instead (save as can handle the lack of a loaded object as well)
+        //If we don't have a working directory or a loaded object, we should save as instead (saveAs as can handle the lack of a loaded stage as well)
         if(currentlyLoadedStage == null || workingDirectory == "") { saveAs(); }
-        
-        //if(!currentFile.exists()) { return; }
         
         createDefinitionFile();
 	}
@@ -647,7 +633,6 @@ public class EditorWindow extends JFrame implements ActionListener {
 		try {
 			nl = (NodeList) xp.evaluate("//text()[normalize-space(.)='']", doc, XPathConstants.NODESET);
 		} catch (XPathExpressionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return;
 		}
