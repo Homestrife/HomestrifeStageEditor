@@ -49,7 +49,7 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
     	texture = new HSTexture(texture);
     }
     
-    private void loadIcon() {
+    public void loadIcon() {
     	icon = TGAReader.loadTGA(texture.filePath, "");
     	if(icon == null)
     		return;
@@ -85,7 +85,7 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
         
         texture.offset.x = texture.offset.x + xDiff;
         texture.offset.y = texture.offset.y + yDiff;
-        
+
         Point pos = parent.parent.getSwingOffset(texture.offset.x * EditorWindow.scale, texture.offset.y * EditorWindow.scale);
         setBounds(pos.x, pos.y, icon.getIconWidth(), icon.getIconHeight());
         

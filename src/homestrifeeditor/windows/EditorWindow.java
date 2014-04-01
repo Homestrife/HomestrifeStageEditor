@@ -2,7 +2,9 @@ package homestrifeeditor.windows;
 
 import homestrifeeditor.HSObject;
 import homestrifeeditor.HSStage;
+import homestrifeeditor.HSTextureLabel;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.KeyEventDispatcher;
@@ -109,6 +111,8 @@ public class EditorWindow extends JFrame implements ActionListener {
         JMenuItem undoItem, redoItem, cutItem, copyItem, pasteItem, deleteItem, selectAllItem;
         JMenu objectMenu;
         JMenuItem objectAttributesItem, eventHoldsItem;
+        JMenu scaleMenu;
+        JMenuItem tenPercentItem, twentyFivePercentItem, fiftyPercentItem, hundredPercentItem;
         JMenu helpMenu;
         JMenuItem helpContentItem, aboutItem;
         
@@ -214,6 +218,31 @@ public class EditorWindow extends JFrame implements ActionListener {
         objectMenu.add(objectAttributesItem);
         objectMenu.add(eventHoldsItem);
         //menuBar.add(object);     
+        
+        scaleMenu = new JMenu("Scale");
+        //
+        tenPercentItem = new JMenuItem("10%");
+        tenPercentItem.setActionCommand("10% Scale");
+        tenPercentItem.addActionListener(this);
+        //
+        twentyFivePercentItem = new JMenuItem("25%");
+        twentyFivePercentItem.setActionCommand("25% Scale");
+        twentyFivePercentItem.addActionListener(this); 
+        //
+        fiftyPercentItem = new JMenuItem("50%");
+        fiftyPercentItem.setActionCommand("50% Scale");
+        fiftyPercentItem.addActionListener(this);
+        //
+        hundredPercentItem = new JMenuItem("100%");
+        hundredPercentItem.setActionCommand("100% Scale");
+        hundredPercentItem.addActionListener(this);
+        //
+
+        scaleMenu.add(tenPercentItem);
+        scaleMenu.add(twentyFivePercentItem);
+        scaleMenu.add(fiftyPercentItem);
+        scaleMenu.add(hundredPercentItem);
+        menuBar.add(scaleMenu);
         
         helpMenu = new JMenu("Help");
         helpContentItem = new JMenuItem("Help Content");
@@ -463,6 +492,18 @@ public class EditorWindow extends JFrame implements ActionListener {
 		case "saveAs": saveAs(); break;
 		case "delete": delete(); break;
         case "exeLocation": setExeLocation(); break;
+        case "10% Scale": adjustScale(.1f); break;
+        case "25% Scale": adjustScale(.25f); break;
+        case "50% Scale": adjustScale(.5f); break;
+        case "100% Scale": adjustScale(1f); break;
+		}
+	}
+
+	private void adjustScale(float d) {
+		scale = d;
+		for(Component comp : textureObjectPane.textureObjectLayeredPane.getComponents()) {
+			if(comp instanceof HSTextureLabel)
+				((HSTextureLabel)comp).loadIcon();
 		}
 	}
 
