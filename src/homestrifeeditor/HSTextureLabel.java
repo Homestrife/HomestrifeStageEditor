@@ -75,6 +75,18 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
         setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
         setBounds(pos.x, pos.y, icon.getIconWidth(), icon.getIconHeight());	
 	}
+    
+    public void updatePos() {
+    	updatePos((int)parentObject.pos.x, (int)parentObject.pos.y);
+    }
+    
+    public void updatePos(int nx, int ny) {
+    	texture.offset.x = nx;
+    	texture.offset.y = ny;
+    	Point pos = parent.parent.getSwingOffset(texture.offset.x * EditorWindow.scale, texture.offset.y * EditorWindow.scale);
+   
+        setBounds(pos.x, pos.y, icon.getIconWidth(), icon.getIconHeight());	
+    }
 
 	@Override
 	public void mouseDragged(MouseEvent e) {

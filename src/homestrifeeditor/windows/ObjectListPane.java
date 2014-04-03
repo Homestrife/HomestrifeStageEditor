@@ -280,7 +280,13 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
 
             obj.pos.x += shiftX;
             obj.pos.y += shiftY;
+            
+            for(Component c : parent.textureObjectPane.textureObjectLayeredPane.getComponents()) {
+            	if(!(c instanceof HSTextureLabel)) continue;
+            	((HSTextureLabel)c).updatePos();
+            }
         }
+     
     }
     
     public void massShiftButtonPressed()
