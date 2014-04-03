@@ -122,9 +122,10 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+    	parent.parent.parent.objectListPane.objectList.setSelectedValue(parentObject, true);
         if(e.getClickCount() == 2)
         {
-            //Double click
+        	parent.parent.parent.objectListPane.editObjectButtonPressed();
         }
         else if(e.getClickCount() == 1)
         {
