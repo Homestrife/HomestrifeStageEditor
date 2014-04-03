@@ -319,7 +319,11 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		objectList.setSelectedIndex(objectList.locationToIndex(e.getPoint()));
 		if(e.getClickCount() == 1) {
+			if(e.getButton() == MouseEvent.BUTTON3) {
+				editObjectButtonPressed();
+			}
 			//TODO bring to front on click
 			//Also select object in layered pane when clicked
 		}

@@ -98,7 +98,6 @@ public class ObjectAttributesWindow extends JFrame implements ActionListener, Ch
     {
     	object.depth = (double) parallaxDepthSpinner.getValue();
 
-    	System.out.println(object.depth);
     	for(Component c : parent.parent.textureObjectPane.textureObjectLayeredPane.getComponents()) {
     		HSTextureLabel texLabel = ((HSTextureLabel)c);
     		if(texLabel.parentObject == object) {
