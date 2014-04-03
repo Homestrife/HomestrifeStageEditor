@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -45,10 +46,12 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
         JLabel objectListLabel = new JLabel("Object List");
         objectListModel = new DefaultListModel<HSObject>();
         objectList = new JList<HSObject>(objectListModel);
+        objectList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         objectList.setName("objectList");
         objectList.setCellRenderer(new ObjectListCellRenderer());
         objectList.addListSelectionListener(this);
         objectList.addMouseListener(this);
+        
         
         JScrollPane objectListScrollPane = new JScrollPane(objectList);
         
@@ -325,10 +328,12 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		objectList.setSelectedIndex(objectList.locationToIndex(e.getPoint()));
 		if(e.getClickCount() == 1) {
 			if(e.getButton() == MouseEvent.BUTTON3) {
+				int[] selected = objectList.getSelectedIndices();
+				objectList.setSelectedIndex(objectList.locationToIndex(e.getPoint()));
 				editObjectButtonPressed();
+				objectList.setSelectedIndices(selected);
 			}
 			//TODO bring to front on click
 			//Also select object in layered pane when clicked
@@ -340,6 +345,18 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
 				scrollPane.revalidate();
 				scrollPane.getHorizontalScrollBar().setValue((int) (sel.pos.x * EditorWindow.scale) + (scrollPane.getHorizontalScrollBar().getMinimum() + scrollPane.getHorizontalScrollBar().getMaximum()) / 2);
 				scrollPane.getVerticalScrollBar().setValue((int) (sel.pos.y * EditorWindow.scale) + (scrollPane.getVerticalScrollBar().getMinimum() + scrollPane.getVerticalScrollBar().getMaximum()) / 2);
+			}
+		}
+		
+		// Update the selected textures in the pane to what is selected in the list
+		int[] curSelected = objectList.getSelectedIndices();
+		TextureObjectLayeredPane lPane = parent.textureObjectPane.textureObjectLayeredPane;
+		for(Component c : lPane.getComponents()) {
+			if(!(c instanceof HSTextureLabel)) continue;
+			for(int i = 0; i < curSelected.length; i++) {
+				if(((HSTextureLabel)c).parentObject.equals(objectListModel.get(curSelected[i]))) {
+					lPane.setSelected((HSTextureLabel) c, i != 0);
+				}
 			}
 		}
 	}
