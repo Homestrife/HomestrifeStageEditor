@@ -32,7 +32,6 @@ public class TextureObjectPane  extends JPanel implements ActionListener, ItemLi
     public JScrollPane textureObjectScrollPane;
     public JToolBar textureObjectToolBar;
     
-    //TODO: Copy/Paste
     public ArrayList<JLabel> clipboard;
     
     public TextureObjectPane(EditorWindow theParent) {
@@ -91,14 +90,12 @@ public class TextureObjectPane  extends JPanel implements ActionListener, ItemLi
 	}
 
 	@Override
-	public void itemStateChanged(ItemEvent arg0) {
-		// TODO Auto-generated method stub
+	public void itemStateChanged(ItemEvent e) {
 		
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+	public void actionPerformed(ActionEvent e) {
 		
 	}
 
