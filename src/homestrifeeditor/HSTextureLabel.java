@@ -9,9 +9,12 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JList;
 
 public class HSTextureLabel extends JLabel implements MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 1L;
@@ -122,27 +125,50 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-    	parent.parent.parent.objectListPane.objectList.setSelectedValue(parentObject, true);
-        if(e.getClickCount() == 2)
-        {
-        	parent.parent.parent.objectListPane.editObjectButtonPressed();
-        }
-        else if(e.getClickCount() == 1)
+        parent.parent.parent.objectListPane.objectList.clearSelection();
+        if(e.getClickCount() == 1)
         {
             boolean multiSelect = false;
+            boolean shouldSelect = true;
             if(e.isControlDown())
             {
                 if(parent.selectedItems.contains(this))
                 {
                     parent.unselect(this);
-                    return;
+                    shouldSelect = false;
                 }
-                multiSelect = true;
+                else {
+                	multiSelect = true;
+                }
             }
-            parent.setSelected(this, multiSelect);
-            mouseStartX = e.getX();
-            mouseStartY = e.getY();
-            parent.parent.parent.objectListPane.objectList.clearSelection();
+            if(shouldSelect) {
+	            parent.setSelected(this, multiSelect);
+	            mouseStartX = e.getX();
+	            mouseStartY = e.getY();
+            }
+        }
+        
+        //Now here we want to make it so we select multiple objects in the list if we have selected multiple textures
+        ArrayList<Integer> toSelectList = new ArrayList<>();
+        DefaultListModel<HSObject> model = parent.parent.parent.objectListPane.objectListModel;
+        JList<HSObject> list = parent.parent.parent.objectListPane.objectList;
+        for(JLabel sel : parent.selectedItems) {
+        	if(!(sel instanceof HSTextureLabel)) continue;
+        	for(int i=0; i < model.getSize(); i++) {
+        		if(((HSTextureLabel)sel).parentObject.equals(model.get(i))) {
+        			toSelectList.add(i);
+        		}
+        	}
+        }
+        int[] toSelectArray = new int[toSelectList.size()];
+        for(int i=0; i < toSelectList.size(); i++) {
+        	toSelectArray[i] = toSelectList.get(i);
+        }
+        list.setSelectedIndices(toSelectArray);
+        
+    	if(e.getClickCount() == 2)
+        {
+        	parent.parent.parent.objectListPane.editObjectButtonPressed();
         }
 	}
 

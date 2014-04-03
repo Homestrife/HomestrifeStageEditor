@@ -277,7 +277,7 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
         for(int i : indices)
         {
             HSObject obj = (HSObject)objectListModel.get(i);
-            
+
             obj.pos.x += shiftX;
             obj.pos.y += shiftY;
         }
