@@ -37,7 +37,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.tree.TreePath;
 
 /**
- * The attributes of the currently selected hold
+ * The attributes of the currently selected object
  * @author Darlos9D
  */
 public class ObjectAttributesWindow extends JFrame implements ActionListener, ChangeListener, DocumentListener, ItemListener {

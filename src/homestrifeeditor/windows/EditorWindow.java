@@ -109,8 +109,6 @@ public class EditorWindow extends JFrame implements ActionListener {
         JMenuItem newStageItem, generateItem, openItem, saveItem, saveAsItem, importAnimationItem, setExeLocationItem;
         JMenu editMenu;
         JMenuItem undoItem, redoItem, cutItem, copyItem, pasteItem, deleteItem, selectAllItem;
-        JMenu objectMenu;
-        JMenuItem objectAttributesItem, eventHoldsItem;
         JMenu scaleMenu;
         JMenuItem tenPercentItem, twentyFivePercentItem, fiftyPercentItem, hundredPercentItem;
         JMenu helpMenu;
@@ -203,21 +201,6 @@ public class EditorWindow extends JFrame implements ActionListener {
         editMenu.add(deleteItem);
         editMenu.add(selectAllItem);
         menuBar.add(editMenu);
-        
-        objectMenu = new JMenu("Object");
-        //
-        objectAttributesItem = new JMenuItem("Attributes");
-        objectAttributesItem.setActionCommand("objectAttributes");
-        objectAttributesItem.addActionListener(this);
-        //
-        eventHoldsItem = new JMenuItem("Event Holds");
-        eventHoldsItem.addActionListener(this);
-        eventHoldsItem.setActionCommand("eventHolds");
-        //
-        
-        objectMenu.add(objectAttributesItem);
-        objectMenu.add(eventHoldsItem);
-        //menuBar.add(object);     
         
         scaleMenu = new JMenu("Scale");
         //

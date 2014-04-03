@@ -50,7 +50,7 @@ public class MassShiftWindow extends JFrame implements ActionListener, ChangeLis
         prevOffsetX = 0;
         prevOffsetY = 0;
         
-        setTitle("Multi-Hold Texture/Hitbox Shift");
+        setTitle("Multi-Object Texture/Hitbox Shift");
         setSize(windowWidth, windowHeight);
         setLocationRelativeTo(null);
         this.setResizable(false);
