@@ -6,6 +6,7 @@ import homestrifeeditor.HSTextureLabel;
 import homestrifeeditor.ObjectListCellRenderer;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -335,16 +336,15 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
 				editObjectButtonPressed();
 				objectList.setSelectedIndices(selected);
 			}
-			//TODO bring to front on click
-			//Also select object in layered pane when clicked
+			//TODO bring to front on click (maybe?)
 		}
 		else if(e.getClickCount() == 2) {
 			HSObject sel = objectList.getSelectedValue();
 			if(sel != null) {
 				JScrollPane scrollPane = parent.textureObjectPane.textureObjectScrollPane;
 				scrollPane.revalidate();
-				scrollPane.getHorizontalScrollBar().setValue((int) (sel.pos.x * EditorWindow.scale) + (scrollPane.getHorizontalScrollBar().getMinimum() + scrollPane.getHorizontalScrollBar().getMaximum()) / 2);
-				scrollPane.getVerticalScrollBar().setValue((int) (sel.pos.y * EditorWindow.scale) + (scrollPane.getVerticalScrollBar().getMinimum() + scrollPane.getVerticalScrollBar().getMaximum()) / 2);
+				scrollPane.getHorizontalScrollBar().setValue((int) (sel.pos.x * EditorWindow.scale) + (scrollPane.getHorizontalScrollBar().getMinimum() + scrollPane.getHorizontalScrollBar().getMaximum()) / 2 - scrollPane.getWidth() / 2);
+				scrollPane.getVerticalScrollBar().setValue((int) (sel.pos.y * EditorWindow.scale) + (scrollPane.getVerticalScrollBar().getMinimum() + scrollPane.getVerticalScrollBar().getMaximum()) / 2 - scrollPane.getHeight() / 2);
 			}
 		}
 	}
