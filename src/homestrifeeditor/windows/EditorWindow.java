@@ -106,7 +106,7 @@ public class EditorWindow extends JFrame implements ActionListener {
     {
         JMenuBar menuBar;
         JMenu fileMenu;
-        JMenuItem newStageItem, generateItem, openItem, saveItem, saveAsItem, importAnimationItem, setExeLocationItem;
+        JMenuItem newStageItem, openItem, saveItem, saveAsItem, importAnimationItem, setExeLocationItem;
         JMenu editMenu;
         JMenuItem undoItem, redoItem, cutItem, copyItem, pasteItem, deleteItem, selectAllItem;
         JMenu scaleMenu;
@@ -120,10 +120,6 @@ public class EditorWindow extends JFrame implements ActionListener {
         newStageItem = new JMenuItem("New");
         newStageItem.setActionCommand("new");
         newStageItem.addActionListener(this);
-        //
-        generateItem = new JMenuItem("Generate...");
-        generateItem.setActionCommand("generate");
-        generateItem.addActionListener(this);
         //
         openItem = new JMenuItem("Open...");
         openItem.setActionCommand("open");
@@ -147,7 +143,6 @@ public class EditorWindow extends JFrame implements ActionListener {
         setExeLocationItem.addActionListener(this);
         //
         fileMenu.add(newStageItem);
-        fileMenu.add(generateItem);
         fileMenu.add(openItem);
         fileMenu.add(saveItem);
         fileMenu.add(saveAsItem);
