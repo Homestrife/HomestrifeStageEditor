@@ -385,8 +385,7 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
         }
 		
         HSObject obj = HSObject.ObjectFromDefinition(file, parent);
-        parent.currentlyLoadedStage.objects.add(obj);
-        parent.textureObjectPane.setStage(parent.currentlyLoadedStage);
+        parent.textureObjectPane.textureObjectLayeredPane.addObject(obj);
         addObjectToList(obj);
 	}
 

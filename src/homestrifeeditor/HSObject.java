@@ -126,7 +126,7 @@ public class HSObject {
         	hsobject = new HSObject();
         	hsobject.texturePath = texPath;
         	hsobject.defPath = window.createAbsolutePathFrom(defPath, dir);
-        	hsobject.name = defPath;
+        	hsobject.name = file.getName();
         	hsobject.offsetX = offsetX;
         	hsobject.offsetY = offsetY;
 
