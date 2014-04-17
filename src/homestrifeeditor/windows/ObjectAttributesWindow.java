@@ -64,6 +64,7 @@ public class ObjectAttributesWindow extends JFrame implements ActionListener, Ch
         setSize(windowWidth, windowHeightGeneral);
         setLocationRelativeTo(null);
         this.setResizable(false);
+        this.setAlwaysOnTop(true);
        
         createWindowContents();
     }
