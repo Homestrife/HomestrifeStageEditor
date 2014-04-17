@@ -92,6 +92,20 @@ public class TextureObjectLayeredPane extends JLayeredPane implements MouseListe
         repaint();
     }
     
+    public void setSelectedFromListPane() {
+		// Update the selected textures in the pane to what is selected in the list
+		int[] curSelected = parent.parent.objectListPane.objectList.getSelectedIndices();
+		unselectAll();
+		for(Component c : getComponents()) {
+			if(!(c instanceof HSTextureLabel)) continue;
+			for(int i = 0; i < curSelected.length; i++) {
+				if(((HSTextureLabel)c).parentObject.equals(parent.parent.objectListPane.objectListModel.get(curSelected[i]))) {
+					setSelected((HSTextureLabel) c, i != 0);
+				}
+			}
+		}
+    }
+    
     @Override
     public void paintComponent(Graphics g)
     {

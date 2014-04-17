@@ -160,23 +160,7 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
             }
         }
         
-        //Now here we want to make it so we select multiple objects in the list if we have selected multiple textures
-        ArrayList<Integer> toSelectList = new ArrayList<>();
-        DefaultListModel<HSObject> model = parent.parent.parent.objectListPane.objectListModel;
-        JList<HSObject> list = parent.parent.parent.objectListPane.objectList;
-        for(JLabel sel : parent.selectedItems) {
-        	if(!(sel instanceof HSTextureLabel)) continue;
-        	for(int i=0; i < model.getSize(); i++) {
-        		if(((HSTextureLabel)sel).parentObject.equals(model.get(i))) {
-        			toSelectList.add(i);
-        		}
-        	}
-        }
-        int[] toSelectArray = new int[toSelectList.size()];
-        for(int i=0; i < toSelectList.size(); i++) {
-        	toSelectArray[i] = toSelectList.get(i);
-        }
-        list.setSelectedIndices(toSelectArray);
+        parent.parent.parent.objectListPane.setSelectedFromTexturePane();
         
     	if(e.getClickCount() == 2)
         {

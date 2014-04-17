@@ -347,23 +347,29 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
 				scrollPane.getVerticalScrollBar().setValue((int) (sel.pos.y * EditorWindow.scale) + (scrollPane.getVerticalScrollBar().getMinimum() + scrollPane.getVerticalScrollBar().getMaximum()) / 2);
 			}
 		}
-		
-		// Update the selected textures in the pane to what is selected in the list
-		int[] curSelected = objectList.getSelectedIndices();
-		TextureObjectLayeredPane lPane = parent.textureObjectPane.textureObjectLayeredPane;
-		for(Component c : lPane.getComponents()) {
-			if(!(c instanceof HSTextureLabel)) continue;
-			for(int i = 0; i < curSelected.length; i++) {
-				if(((HSTextureLabel)c).parentObject.equals(objectListModel.get(curSelected[i]))) {
-					lPane.setSelected((HSTextureLabel) c, i != 0);
-				}
-			}
-		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		
+	}
+	
+	public void setSelectedFromTexturePane() {
+        //Now here we want to make it so we select multiple objects in the list if we have selected multiple textures
+        ArrayList<Integer> toSelectList = new ArrayList<>();
+        for(JLabel sel : parent.textureObjectPane.textureObjectLayeredPane.selectedItems) {
+        	if(!(sel instanceof HSTextureLabel)) continue;
+        	for(int i=0; i < objectListModel.getSize(); i++) {
+        		if(((HSTextureLabel)sel).parentObject.equals(objectListModel.get(i))) {
+        			toSelectList.add(i);
+        		}
+        	}
+        }
+        int[] toSelectArray = new int[toSelectList.size()];
+        for(int i=0; i < toSelectList.size(); i++) {
+        	toSelectArray[i] = toSelectList.get(i);
+        }
+        objectList.setSelectedIndices(toSelectArray);
 	}
 
 	private void addObject() {
@@ -399,8 +405,8 @@ public class ObjectListPane extends JPanel implements ActionListener, ListSelect
 	}
 
 	@Override
-	public void valueChanged(ListSelectionEvent arg0) {
-		
+	public void valueChanged(ListSelectionEvent e) {
+		parent.textureObjectPane.textureObjectLayeredPane.setSelectedFromListPane();
 	}
 	
 }
