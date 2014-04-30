@@ -3,6 +3,8 @@ package homestrifeeditor.windows;
 import homestrifeeditor.HSObject;
 import homestrifeeditor.HSStage;
 import homestrifeeditor.HSTextureLabel;
+import homestrifeeditor.windows.panes.ObjectListPane;
+import homestrifeeditor.windows.panes.TextureObjectPane;
 
 import java.awt.Component;
 import java.awt.Dimension;

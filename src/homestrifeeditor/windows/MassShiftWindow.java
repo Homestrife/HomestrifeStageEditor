@@ -4,6 +4,8 @@
  */
 package homestrifeeditor.windows;
 
+import homestrifeeditor.windows.panes.ObjectListPane;
+
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;

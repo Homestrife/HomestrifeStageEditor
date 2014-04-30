@@ -1,9 +1,13 @@
-package homestrifeeditor.windows;
+package homestrifeeditor.windows.panes;
 
 import homestrifeeditor.HSObject;
 import homestrifeeditor.HSStage;
 import homestrifeeditor.HSTextureLabel;
 import homestrifeeditor.ObjectListCellRenderer;
+import homestrifeeditor.windows.EditorWindow;
+import homestrifeeditor.windows.MassShiftWindow;
+import homestrifeeditor.windows.ObjectAttributesWindow;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Rectangle;

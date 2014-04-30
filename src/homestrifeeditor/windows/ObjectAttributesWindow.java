@@ -6,6 +6,7 @@ package homestrifeeditor.windows;
 
 import homestrifeeditor.HSObject;
 import homestrifeeditor.HSTextureLabel;
+import homestrifeeditor.windows.panes.ObjectListPane;
 
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -22,6 +23,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -40,7 +42,7 @@ import javax.swing.tree.TreePath;
  * The attributes of the currently selected object
  * @author Darlos9D
  */
-public class ObjectAttributesWindow extends JFrame implements ActionListener, ChangeListener, DocumentListener, ItemListener {
+public class ObjectAttributesWindow extends JDialog implements ActionListener, ChangeListener, DocumentListener, ItemListener {
 	private static final long serialVersionUID = 1L;
 	
 	private static int windowWidth = 400;
@@ -53,7 +55,13 @@ public class ObjectAttributesWindow extends JFrame implements ActionListener, Ch
     private JButton applyButton;
     
     private JLabel parallaxDepthLabel;
-    private JSpinner parallaxDepthSpinner; private static String parallaxDepthTooltip = "<html>The higher the number, the farther away from the camera it is</html>";
+    private JSpinner parallaxDepthSpinner;
+    private static String parallaxDepthTooltip = "<html>The higher the number, the farther away from the camera it is</html>";
+    
+    private JLabel xLabel, yLabel;
+    private JSpinner xSpinner, ySpinner;
+    private static String positionTooltip = "<html>Set the position of the object precisely</html>";
+    
     
     public ObjectAttributesWindow(ObjectListPane theParent, HSObject theObject)
     {
@@ -65,45 +73,66 @@ public class ObjectAttributesWindow extends JFrame implements ActionListener, Ch
         setLocationRelativeTo(null);
         this.setResizable(false);
         this.setAlwaysOnTop(true);
+        
+        // Now you can't click past the window
+        this.setModal(true);
+        this.setModalityType(ModalityType.APPLICATION_MODAL);
        
         createWindowContents();
     }
     
     private void createWindowContents()
     {
+    	JPanel dataPane = new JPanel(new GridLayout(0, 2, 10, 10));
+    	
+    	xLabel = new JLabel("X Position");
+    	xLabel.setToolTipText(positionTooltip);
+    	dataPane.add(xLabel);
+
+    	xSpinner = new JSpinner(new SpinnerNumberModel(0.0, -10000.0, 10000.0, 1.0));
+    	xSpinner.setToolTipText(positionTooltip);
+    	xSpinner.addChangeListener(this);
+    	xSpinner.setValue((double)object.offsetX);
+    	xSpinner.setEnabled(true);
+    	dataPane.add(xSpinner);
+    	
+    	yLabel = new JLabel("Y Position");
+    	yLabel.setToolTipText(positionTooltip);
+    	dataPane.add(yLabel);
+    	
     	parallaxDepthLabel = new JLabel("Parallax Depth");
     	parallaxDepthLabel.setToolTipText(parallaxDepthTooltip);
+    	dataPane.add(parallaxDepthLabel);
+    	
     	parallaxDepthSpinner = new JSpinner(new SpinnerNumberModel(0.0, -1000.0, 1000.0, 1.0));
     	parallaxDepthSpinner.setToolTipText(parallaxDepthTooltip);
     	parallaxDepthSpinner.addChangeListener(this);
     	parallaxDepthSpinner.setValue(object.depth);
     	parallaxDepthSpinner.setEnabled(true);
-    	
-    	JPanel dataPane = new JPanel(new GridBagLayout());
-    	GridBagConstraints gbc = new GridBagConstraints();
-    	
-    	gbc.weightx = .5;
-    	
-    	gbc.gridx = 0;
-    	gbc.gridy = 0;
-    	dataPane.add(parallaxDepthLabel, gbc);
-    	
-    	gbc.gridx = 1;
-    	gbc.gridy = 0;
-    	dataPane.add(parallaxDepthSpinner, gbc);
+    	dataPane.add(parallaxDepthSpinner);
     	
     	setContentPane(dataPane);
     }
     
     public void fieldChanged()
     {
-    	object.depth = (double) parallaxDepthSpinner.getValue();
+    	System.out.println("X Pos: " + object.offsetX);
+    	if(parallaxDepthSpinner != null)
+    		object.depth = (double) parallaxDepthSpinner.getValue();
+
+    	if(xSpinner != null)
+    		object.offsetX = ((Double)xSpinner.getValue()).floatValue();
+    	if(ySpinner != null)
+    		object.offsetY = ((Double)ySpinner.getValue()).floatValue();
 
     	for(Component c : parent.parent.textureObjectPane.textureObjectLayeredPane.getComponents()) {
     		HSTextureLabel texLabel = ((HSTextureLabel)c);
     		if(texLabel.parentObject == object) {
     			parent.parent.textureObjectPane.textureObjectLayeredPane.remove(texLabel);
     			texLabel.texture.depth = -object.depth;
+    			texLabel.texture.offset.x = object.offsetX;
+    			texLabel.texture.offset.y = object.offsetY;
+    			texLabel.setBounds((int)(object.offsetX * EditorWindow.scale), (int)(object.offsetY * EditorWindow.scale), (int)(texLabel.getWidth() * EditorWindow.scale), (int)(texLabel.getHeight() * EditorWindow.scale));
     			parent.parent.textureObjectPane.textureObjectLayeredPane.add(texLabel, object.depth);
     			parent.parent.textureObjectPane.textureObjectLayeredPane.repaint();
     			break;

@@ -1,7 +1,7 @@
 package homestrifeeditor;
 
 import homestrifeeditor.windows.EditorWindow;
-import homestrifeeditor.windows.TextureObjectLayeredPane;
+import homestrifeeditor.windows.panes.TextureObjectLayeredPane;
 
 import java.awt.Component;
 import java.awt.Dimension;

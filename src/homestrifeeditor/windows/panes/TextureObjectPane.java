@@ -1,7 +1,8 @@
-package homestrifeeditor.windows;
+package homestrifeeditor.windows.panes;
 
 import homestrifeeditor.HSStage;
 import homestrifeeditor.HSVect2D;
+import homestrifeeditor.windows.EditorWindow;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

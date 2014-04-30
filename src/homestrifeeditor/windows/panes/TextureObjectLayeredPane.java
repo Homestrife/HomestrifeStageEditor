@@ -1,4 +1,4 @@
-package homestrifeeditor.windows;
+package homestrifeeditor.windows.panes;
 
 import homestrifeeditor.HSObject;
 import homestrifeeditor.HSStage;
