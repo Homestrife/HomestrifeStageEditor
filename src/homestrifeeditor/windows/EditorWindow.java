@@ -78,6 +78,11 @@ public class EditorWindow extends JFrame implements ActionListener {
     
     public static JFileChooser fileChooser;
     
+    private String changeLogText = "<html><h2>Noteworthy Changes:</h2>" +
+			"30 April, 2014:" +
+			"<ul><li>Added change log! :D</li></ul>" +
+			"</html>";
+    
     public EditorWindow() {    
     	curFile = null;
     	
@@ -114,7 +119,7 @@ public class EditorWindow extends JFrame implements ActionListener {
         JMenu scaleMenu;
         JMenuItem tenPercentItem, twentyFivePercentItem, fiftyPercentItem, hundredPercentItem;
         JMenu helpMenu;
-        JMenuItem helpContentItem, aboutItem;
+        JMenuItem helpContentItem, aboutItem, changeLogItem;
         
         menuBar = new JMenuBar();
         
@@ -225,10 +230,18 @@ public class EditorWindow extends JFrame implements ActionListener {
         menuBar.add(scaleMenu);
         
         helpMenu = new JMenu("Help");
+        //
         helpContentItem = new JMenuItem("Help Content");
-        aboutItem = new JMenuItem("About");
         helpMenu.add(helpContentItem);
+        //
+        aboutItem = new JMenuItem("About");
         helpMenu.add(aboutItem);
+        //
+        changeLogItem = new JMenuItem("Change Log");
+        changeLogItem.setActionCommand("changeLog");
+        changeLogItem.addActionListener(this);
+        //
+        helpMenu.add(changeLogItem);
         menuBar.add(helpMenu);
         
         setJMenuBar(menuBar);
@@ -402,6 +415,10 @@ public class EditorWindow extends JFrame implements ActionListener {
 		textureObjectPane.resetScrollBars();
 	}
     
+    private void changeLog() {
+    	JOptionPane.showMessageDialog(this, changeLogText,"Change Log", JOptionPane.INFORMATION_MESSAGE);
+	}
+    
     public String createAbsolutePath(String relPath)
     {
     	return createAbsolutePathFrom(relPath, workingDirectory);
@@ -485,6 +502,7 @@ public class EditorWindow extends JFrame implements ActionListener {
         case "25% Scale": adjustScale(.25f); break;
         case "50% Scale": adjustScale(.5f); break;
         case "100% Scale": adjustScale(1f); break;
+        case "changeLog": changeLog(); break;
 		}
 	}
 
