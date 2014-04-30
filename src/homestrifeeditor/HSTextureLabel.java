@@ -9,12 +9,8 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
-
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JList;
 
 public class HSTextureLabel extends JLabel implements MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 1L;

@@ -64,7 +64,8 @@ public class TGAReader {
         return (short)iRetVal;
     }
     
-    public static ImageIcon loadTGA(String texFilePath, String palFilePath)
+    @SuppressWarnings("unused")
+	public static ImageIcon loadTGA(String texFilePath, String palFilePath)
     {
         boolean bigEndian = false;
         
@@ -80,22 +81,22 @@ public class TGAReader {
         short fileBytes;
         int curFileByte;
         byte[] indexBytes;
-	short index;
-	boolean opaque = true;
-	byte imageIDLength;
-	byte colorMapType;
-	byte imageType;
-        byte[] colorMapLengthBytes = new byte[2];
-	short colorMapLength;
-	byte colorMapEntrySize;
-	byte pixelDepth;
-	byte bytesPerPixel;
-	byte colorBytesPerPixel = 3; //BGR
-	byte bytesPerColorMapEntry;
-	byte GLbytesPerPixel = 4; //BGRA
-	byte imageDescriptor;
-	boolean topAlign = true;
-	boolean rightAlign = true;
+		short index;
+		boolean opaque = true;
+		byte imageIDLength;
+		byte colorMapType;
+		byte imageType;
+		byte[] colorMapLengthBytes = new byte[2];
+		short colorMapLength;
+		byte colorMapEntrySize;
+		byte pixelDepth;
+		byte bytesPerPixel;
+		byte colorBytesPerPixel = 3; //BGR
+		byte bytesPerColorMapEntry;
+		byte GLbytesPerPixel = 4; //BGRA
+		byte imageDescriptor;
+		boolean topAlign = true;
+		boolean rightAlign = true;
         
         try
         {

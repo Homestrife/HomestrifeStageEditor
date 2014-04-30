@@ -9,34 +9,20 @@ import homestrifeeditor.HSTextureLabel;
 import homestrifeeditor.windows.panes.ObjectListPane;
 
 import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.tree.TreePath;
 
 /**
  * The attributes of the currently selected object
@@ -47,12 +33,11 @@ public class ObjectAttributesWindow extends JDialog implements ActionListener, C
 	
 	private static int windowWidth = 400;
     private static int windowHeightGeneral = 200;
-    private static int windowBorderBuffer = 10;
     
     public ObjectListPane parent;
     private HSObject object;
     
-    private JButton applyButton;
+    //private JButton applyButton;
     
     private JLabel parallaxDepthLabel;
     private JSpinner parallaxDepthSpinner;
