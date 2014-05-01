@@ -76,7 +76,7 @@ public class HSObject {
         	hsobject.offsetX = offsetX;
         	hsobject.offsetY = offsetY;
         	hsobject.name = def.getName();
-        	hsobject.pos = new HSVect2D(offsetX, offsetY);
+        	hsobject.pos = new HSVect2D(0, 0);
 		} 
         catch(ParserConfigurationException e) {
         	JOptionPane.showMessageDialog(null, e.getMessage(), "Parser Configuration Exception", JOptionPane.ERROR_MESSAGE);  

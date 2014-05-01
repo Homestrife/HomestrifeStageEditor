@@ -77,9 +77,9 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
     }
     
     public void updatePos(int nx, int ny) {
-    	texture.offset.x = nx;
-    	texture.offset.y = ny;
-    	Point pos = parent.parent.getSwingOffset(texture.offset.x * EditorWindow.scale, texture.offset.y * EditorWindow.scale);
+    	parentObject.pos.x = nx;
+    	parentObject.pos.y = ny;
+    	Point pos = parent.parent.getSwingOffset(parentObject.pos.x * EditorWindow.scale, parentObject.pos.y * EditorWindow.scale);
    
         setBounds(pos.x, pos.y, icon.getIconWidth(), icon.getIconHeight());	
     }
@@ -102,10 +102,10 @@ public class HSTextureLabel extends JLabel implements MouseListener, MouseMotion
         
         if(!moveBox) { return; }
         
-        texture.offset.x = texture.offset.x + xDiff;
-        texture.offset.y = texture.offset.y + yDiff;
+        parentObject.pos.x = parentObject.pos.x + xDiff;
+        parentObject.pos.y = parentObject.pos.y + yDiff;
 
-        Point pos = parent.parent.getSwingOffset(texture.offset.x * EditorWindow.scale, texture.offset.y * EditorWindow.scale);
+        Point pos = parent.parent.getSwingOffset(parentObject.pos.x * EditorWindow.scale, parentObject.pos.y * EditorWindow.scale);
         setBounds(pos.x, pos.y, icon.getIconWidth(), icon.getIconHeight());
         
         parent.repaint();

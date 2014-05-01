@@ -77,13 +77,20 @@ public class ObjectAttributesWindow extends JDialog implements ActionListener, C
     	xSpinner = new JSpinner(new SpinnerNumberModel(0.0, -10000.0, 10000.0, 1.0));
     	xSpinner.setToolTipText(positionTooltip);
     	xSpinner.addChangeListener(this);
-    	xSpinner.setValue((double)object.offsetX);
+    	xSpinner.setValue((double)object.pos.x);
     	xSpinner.setEnabled(true);
     	dataPane.add(xSpinner);
     	
     	yLabel = new JLabel("Y Position");
     	yLabel.setToolTipText(positionTooltip);
     	dataPane.add(yLabel);
+
+    	ySpinner = new JSpinner(new SpinnerNumberModel(0.0, -10000.0, 10000.0, 1.0));
+    	ySpinner.setToolTipText(positionTooltip);
+    	ySpinner.addChangeListener(this);
+    	ySpinner.setValue((double)object.pos.y);
+    	ySpinner.setEnabled(true);
+    	dataPane.add(ySpinner);
     	
     	parallaxDepthLabel = new JLabel("Parallax Depth");
     	parallaxDepthLabel.setToolTipText(parallaxDepthTooltip);
@@ -101,25 +108,25 @@ public class ObjectAttributesWindow extends JDialog implements ActionListener, C
     
     public void fieldChanged()
     {
-    	System.out.println("X Pos: " + object.offsetX);
     	if(parallaxDepthSpinner != null)
     		object.depth = (double) parallaxDepthSpinner.getValue();
 
     	if(xSpinner != null)
-    		object.offsetX = ((Double)xSpinner.getValue()).floatValue();
+    		object.pos.x = ((Double)xSpinner.getValue()).floatValue();
     	if(ySpinner != null)
-    		object.offsetY = ((Double)ySpinner.getValue()).floatValue();
+    		object.pos.y = ((Double)ySpinner.getValue()).floatValue();
 
     	for(Component c : parent.parent.textureObjectPane.textureObjectLayeredPane.getComponents()) {
     		HSTextureLabel texLabel = ((HSTextureLabel)c);
     		if(texLabel.parentObject == object) {
     			parent.parent.textureObjectPane.textureObjectLayeredPane.remove(texLabel);
     			texLabel.texture.depth = -object.depth;
-    			texLabel.texture.offset.x = object.offsetX;
-    			texLabel.texture.offset.y = object.offsetY;
-    			texLabel.setBounds((int)(object.offsetX * EditorWindow.scale), (int)(object.offsetY * EditorWindow.scale), (int)(texLabel.getWidth() * EditorWindow.scale), (int)(texLabel.getHeight() * EditorWindow.scale));
+    			//texLabel.texture.offset.x = object.offsetX;
+    			//texLabel.texture.offset.y = object.offsetY;
+    			//texLabel.setBounds((int)(object.offsetX * EditorWindow.scale), (int)(object.offsetY * EditorWindow.scale), (int)(texLabel.getWidth() * EditorWindow.scale), (int)(texLabel.getHeight() * EditorWindow.scale));
     			parent.parent.textureObjectPane.textureObjectLayeredPane.add(texLabel, object.depth);
     			parent.parent.textureObjectPane.textureObjectLayeredPane.repaint();
+    			texLabel.updatePos();
     			break;
     		}
     	}
