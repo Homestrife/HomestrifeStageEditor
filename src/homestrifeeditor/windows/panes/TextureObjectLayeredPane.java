@@ -4,6 +4,8 @@ import homestrifeeditor.HSObject;
 import homestrifeeditor.HSStage;
 import homestrifeeditor.HSTexture;
 import homestrifeeditor.HSTextureLabel;
+import homestrifeeditor.windows.EditorWindow;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -117,6 +119,10 @@ public class TextureObjectLayeredPane extends JLayeredPane implements MouseListe
         
         g.drawLine(0, this.getHeight() / 2, this.getWidth(), this.getHeight() / 2);
         g.drawLine(this.getWidth() / 2, 0, this.getWidth() / 2, this.getHeight());
+        if(parent.parent.currentlyLoadedStage != null) {
+        	g.setColor(Color.RED);
+        	g.drawRect((int)(this.getWidth() / 2 + (-parent.parent.currentlyLoadedStage.width / 2) * EditorWindow.scale), (int)(this.getHeight() / 2 + (-parent.parent.currentlyLoadedStage.height / 2) * EditorWindow.scale), (int)(parent.parent.currentlyLoadedStage.width * EditorWindow.scale), (int)(parent.parent.currentlyLoadedStage.height * EditorWindow.scale));
+        }
     }
 
 	@Override
