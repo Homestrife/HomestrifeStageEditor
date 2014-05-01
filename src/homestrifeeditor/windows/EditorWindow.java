@@ -79,6 +79,8 @@ public class EditorWindow extends JFrame implements ActionListener {
     public static JFileChooser fileChooser;
     
     private String changeLogText = "<html><h2>Noteworthy Changes:</h2>" +
+			"1 May, 2014:" +
+			"<ul><li>Added border around level boundry</li></ul>" +
 			"30 April, 2014:" +
 			"<ul><li>Added change log! :D</li></ul>" +
 			"</html>";
