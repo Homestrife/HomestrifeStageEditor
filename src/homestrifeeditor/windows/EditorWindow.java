@@ -116,6 +116,8 @@ public class EditorWindow extends JFrame implements ActionListener {
         JMenuItem newStageItem, openItem, saveItem, saveAsItem, importAnimationItem, setExeLocationItem;
         JMenu editMenu;
         JMenuItem undoItem, redoItem, cutItem, copyItem, pasteItem, deleteItem, selectAllItem;
+        JMenu stageMenu;
+        JMenuItem stagePropertiesItem;
         JMenu scaleMenu;
         JMenuItem tenPercentItem, twentyFivePercentItem, fiftyPercentItem, hundredPercentItem;
         JMenu helpMenu;
@@ -203,6 +205,15 @@ public class EditorWindow extends JFrame implements ActionListener {
         editMenu.add(deleteItem);
         editMenu.add(selectAllItem);
         menuBar.add(editMenu);
+        
+        stageMenu = new JMenu("Stage");
+        //
+        stagePropertiesItem= new JMenuItem("Properties");
+        stagePropertiesItem.setActionCommand("stageProperties");
+        stagePropertiesItem.addActionListener(this);
+        //
+        stageMenu.add(stagePropertiesItem);
+        menuBar.add(stageMenu);
         
         scaleMenu = new JMenu("Scale");
         //
@@ -498,12 +509,22 @@ public class EditorWindow extends JFrame implements ActionListener {
 		case "saveAs": saveAs(); break;
 		case "delete": delete(); break;
         case "exeLocation": setExeLocation(); break;
+        case "stageProperties": stageProperties(); break;
         case "10% Scale": adjustScale(.1f); break;
         case "25% Scale": adjustScale(.25f); break;
         case "50% Scale": adjustScale(.5f); break;
         case "100% Scale": adjustScale(1f); break;
         case "changeLog": changeLog(); break;
 		}
+	}
+
+	private void stageProperties() {
+		if(currentlyLoadedStage == null) {
+    		JOptionPane.showMessageDialog(this, "No Stage loaded", "Whoops", JOptionPane.ERROR_MESSAGE);  
+    		//return;
+		}
+        StagePropertiesWindow window = new StagePropertiesWindow(this, currentlyLoadedStage);
+        window.setVisible(true);
 	}
 
 	private void adjustScale(float d) {
