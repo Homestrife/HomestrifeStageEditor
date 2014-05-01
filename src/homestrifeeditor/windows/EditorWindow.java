@@ -80,7 +80,8 @@ public class EditorWindow extends JFrame implements ActionListener {
     
     private String changeLogText = "<html><h2>Noteworthy Changes:</h2>" +
 			"1 May, 2014:" +
-			"<ul><li>Added border around level boundry</li></ul>" +
+			"<ul><li>Added border around level boundry</li>" +
+			"<li>Can edit stage width and height in Stage Properties window</li></ul>" +
 			"30 April, 2014:" +
 			"<ul><li>Added change log! :D</li></ul>" +
 			"</html>";
