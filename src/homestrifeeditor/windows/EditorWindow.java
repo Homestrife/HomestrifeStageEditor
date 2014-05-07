@@ -79,6 +79,8 @@ public class EditorWindow extends JFrame implements ActionListener {
     public static JFileChooser fileChooser;
     
     private String changeLogText = "<html><h2>Noteworthy Changes:</h2>" +
+			"6 May, 2014:" +
+			"<ul><li>Save using forward slashes only</li></ul>" +
 			"1 May, 2014:" +
 			"<ul><li>Added border around level boundry</li>" +
 			"<li>Can edit stage width and height in Stage Properties window</li></ul>" +
@@ -440,9 +442,8 @@ public class EditorWindow extends JFrame implements ActionListener {
     
     public String createAbsolutePathFrom(String relPath, String fromPath)
     {
-    	relPath = relPath.replace('\\', File.separatorChar);
-    	relPath = relPath.replace('/', File.separatorChar);
-    	if(!fromPath.endsWith(File.separator)) fromPath += File.separator;
+    	relPath = relPath.replace('\\', '/');
+    	if(!fromPath.endsWith("/")) fromPath += "/";
     	File a = new File(fromPath);
 	    File b = new File(a, relPath);
 	    String absolute = "";
@@ -451,7 +452,7 @@ public class EditorWindow extends JFrame implements ActionListener {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-	    return absolute;
+	    return absolute.replace("\\", "/");
     }
     
     public String createRelativePath(String absPath)
@@ -461,8 +462,10 @@ public class EditorWindow extends JFrame implements ActionListener {
     
     public String createPathRelativeTo(String absPath, String relativeTo)
     {
-    	String[] relativeToPieces = relativeTo.split(File.separator.compareTo("\\") == 0 ? "\\\\" : "/");
-        String[] absPathPieces = absPath.split(File.separator.compareTo("\\") == 0 ? "\\\\" : "/");
+    	absPath = absPath.replace('\\', '/');
+    	relativeTo = relativeTo.replace('\\', '/');
+    	String[] relativeToPieces = relativeTo.split("/");
+        String[] absPathPieces = absPath.split("/");
         
         //first, make sure they share the same drive
         if(!relativeToPieces[0].equals(absPathPieces[0]))
@@ -486,7 +489,7 @@ public class EditorWindow extends JFrame implements ActionListener {
         String relativePath = "";
         for(int i = 0; i < end - divergeancePoint; i++)
         {
-            relativePath += ".." + File.separator;
+            relativePath += "../";
         }
         
         //add the absolute path starting with the divergence point
@@ -494,12 +497,12 @@ public class EditorWindow extends JFrame implements ActionListener {
         {
             if(i > divergeancePoint)
             {
-                relativePath += File.separator;
+                relativePath += "/";
             }
             relativePath += absPathPieces[i];
         }
         
-        return relativePath;
+        return relativePath.replace("\\", "/");
     }
 	
 	@Override

@@ -93,12 +93,11 @@ public class HSObject {
 	public static HSObject ObjectFromDefinition(String dir, String defPath, NamedNodeMap attributes, EditorWindow window) {
 		HSObject hsobject = null;
 		String texPath = "";
-		defPath = defPath.replace("/", File.separator);
-		defPath = defPath.replace("\\", File.separator);
+		defPath = defPath.replace("\\", "/");
 		float offsetX = 0;
 		float offsetY = 0;
 		try {
-			File file = new File(dir + File.separator + defPath);
+			File file = new File(dir + "/" + defPath);
         	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         	Document doc = dBuilder.parse(file);
